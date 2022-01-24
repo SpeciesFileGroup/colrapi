@@ -46,7 +46,7 @@ GEM
     vcr (6.0.0)
 
 PLATFORMS
-  x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.1, >= 2.1.4)
