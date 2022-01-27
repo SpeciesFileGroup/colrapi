@@ -6,19 +6,26 @@ module Colrapi
   class Request
     attr_accessor :endpoint
     attr_accessor :q
+    attr_accessor :rank
+
+    attr_accessor :limit
+    attr_accessor :offset
     attr_accessor :verbose
 
     attr_accessor :options
 
-    def initialize(endpoint, q, verbose)
+    def initialize(endpoint, q, rank, offset, limit, verbose)
       @endpoint = endpoint
       @verbose = verbose
       @q = q
+      @rank = rank
+      @limit = limit
+      @offset = offset
       @options = options # TODO: not added at colrapi.rb
     end
 
     def perform
-      args = { q: q}
+      args = { q: q, offset: offset, rank: rank, limit: limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
