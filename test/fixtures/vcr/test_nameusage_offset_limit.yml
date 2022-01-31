@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.catalogueoflife.org/nameusage/search?limit=1&offset=2&q=Homo%20sapiens
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday/v1.9.3 Colrapi/v0.1.0
+      X-User-Agent:
+      - Faraday/v1.9.3 Colrapi/v0.1.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 27 Jan 2022 22:35:27 GMT
+      Content-Type:
+      - application/json
+      Cache-Control:
+      - must-revalidate,no-cache,no-store
+      Content-Length:
+      - '577'
+      X-Varnish:
+      - '938573998'
+      Age:
+      - '0'
+      Via:
+      - 1.1 varnish (Varnish/6.0)
+      X-Cache:
+      - miss uncacheable
+      Vary:
+      - Origin
+      Accept-Ranges:
+      - bytes
+      Connection:
+      - keep-alive
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJvZmZzZXQiOjIsImxpbWl0IjoxLCJ0b3RhbCI6MTE5LCJyZXN1bHQiOlt7ImlkIjoifkMyTCIsImNsYXNzaWZpY2F0aW9uIjpbeyJpZCI6IjBlYTlhMzNiLTZiMzEtNDU1MS1iNGUyLWE3NzJhYWY5NjIzMSIsIm5hbWUiOiJBbmltYWxpYSIsInJhbmsiOiJraW5nZG9tIiwibGFiZWwiOiJBbmltYWxpYSIsImxhYmVsSHRtbCI6IkFuaW1hbGlhIn0seyJpZCI6ImQ1MGQwMDY2LWEzN2QtNDc5NS1iNWY4LTNkZGEwMjlhNDk1NiIsIm5hbWUiOiJNYW1tYWxpYSIsInJhbmsiOiJjbGFzcyIsImxhYmVsIjoiTWFtbWFsaWEiLCJsYWJlbEh0bWwiOiJNYW1tYWxpYSJ9LHsiaWQiOiI5Zjc1MzViOC05MTI0LTRhNmEtYmE0My05MjU5Zjc3NzAzZGMiLCJuYW1lIjoiUHJpbWF0ZXMiLCJyYW5rIjoib3JkZXIiLCJsYWJlbCI6IlByaW1hdGVzIiwibGFiZWxIdG1sIjoiUHJpbWF0ZXMifSx7ImlkIjoifkMyTCIsIm5hbWUiOiJIb21vIiwicmFuayI6ImdlbnVzIiwibGFiZWwiOiJIb21vIiwibGFiZWxIdG1sIjoiPGk+SG9tbzwvaT4ifV0sInVzYWdlIjp7ImNyZWF0ZWQiOiIyMDIxLTAyLTEwVDEwOjEwOjQyLjY0NTA3NCIsImNyZWF0ZWRCeSI6MTAsIm1vZGlmaWVkIjoiMjAyMS0wMi0xMFQxMDoxMDo0Mi42NDUwNzQiLCJtb2RpZmllZEJ5IjoxMCwiZGF0YXNldEtleSI6MjAzNywiaWQiOiJ+QzJMIiwibmFtZSI6eyJjcmVhdGVkIjoiMjAyMS0wMi0xMFQxMDowNzo1OC40NzI2NDYiLCJjcmVhdGVkQnkiOjEwLCJtb2RpZmllZCI6IjIwMjEtMDItMTBUMTA6MDc6NTguNDcyNjQ2IiwibW9kaWZpZWRCeSI6MTAsImRhdGFzZXRLZXkiOjIwMzcsImlkIjoifkMySyIsInNjaWVudGlmaWNOYW1lIjoiSG9tbyIsImF1dGhvcnNoaXAiOiJTYXBpZW5zIEHFv2lhdGljdXMgTGlubsOmdXMsIDE3NTgiLCJyYW5rIjoiZ2VudXMiLCJ1bmlub21pYWwiOiJIb21vIiwiY29tYmluYXRpb25BdXRob3JzaGlwIjp7ImF1dGhvcnMiOlsiU2FwaWVucyBBxb9pYXRpY3VzIExpbm7DpnVzIl0sInllYXIiOiIxNzU4In0sImNvZGUiOiJ6b29sb2dpY2FsIiwib3JpZ2luIjoidmVyYmF0aW0gYWNjZXB0ZWQiLCJ0eXBlIjoic2NpZW50aWZpYyIsInBhcnNlZCI6dHJ1ZX0sInN0YXR1cyI6InByb3Zpc2lvbmFsbHkgYWNjZXB0ZWQiLCJvcmlnaW4iOiJ2ZXJiYXRpbSBhY2NlcHRlZCIsInBhcmVudElkIjoiOWY3NTM1YjgtOTEyNC00YTZhLWJhNDMtOTI1OWY3NzcwM2RjIiwibGFiZWwiOiJIb21vIFNhcGllbnMgQcW/aWF0aWN1cyBMaW5uw6Z1cywgMTc1OCIsImxhYmVsSHRtbCI6IjxpPkhvbW88L2k+IFNhcGllbnMgQcW/aWF0aWN1cyBMaW5uw6Z1cywgMTc1OCJ9fV0sImxhc3QiOmZhbHNlLCJlbXB0eSI6ZmFsc2V9
+  recorded_at: Thu, 27 Jan 2022 22:35:27 GMT
+recorded_with: VCR 6.0.0
