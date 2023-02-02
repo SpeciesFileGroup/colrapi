@@ -10,15 +10,24 @@ module Colrapi
 
     attr_accessor :options
 
-    def initialize(endpoint, q, verbose)
-      @endpoint = endpoint
-      @verbose = verbose
-      @q = q
-      @options = options # TODO: not added at colrapi.rb
+    def initialize(**args)
+      @endpoint = args[:endpoint]
+      @verbose = args[:verbose]
+      @q = args[:q]
+      @content = args[:content]
+      @type = args[:type]
+      @rank = args[:rank]
+      @min_rank = args[:min_rank]
+      @max_rank = args[:max_rank]
+      @sort_by = args[:sort_by]
+      @limit = args[:limit]
+      @offset = args[:offset]
+      @options = args[:options] # TODO: not added at colrapi.rb
     end
 
     def perform
-      args = { q: q}
+      args = { q: @q, content: @content, type: @type, offset: @offset,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, sortBy: @sort_by, limit: @limit }
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
