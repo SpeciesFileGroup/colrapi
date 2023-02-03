@@ -15,6 +15,9 @@ module Colrapi
   #
   # @param dataset_id [String] The dataset id
   # @param name_id [String] The name id
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
@@ -44,7 +47,7 @@ module Colrapi
   # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
-  # @return [Array] An array of hashes
+  # @return [Array, Boolean] An array of hashes
   def self.nameusage_search(q: nil, dataset_id: nil, endpoint: 'nameusage/search', content: nil, type: nil,
                             rank: nil, min_rank: nil, max_rank: nil, sort_by: nil, offset: 0, limit: 10, verbose: false)
 
@@ -62,6 +65,7 @@ module Colrapi
   #
   # @param dataset_id [String] The dataset id
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_ids(dataset_id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/ids", verbose: verbose).perform
   end
@@ -72,6 +76,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}", verbose: verbose).perform
   end
@@ -82,6 +87,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_classification(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/classification", verbose: verbose).perform
   end
@@ -92,6 +98,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_distribution(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/distribution", verbose: verbose).perform
   end
@@ -102,6 +109,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_info(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/info", verbose: verbose).perform
   end
@@ -112,6 +120,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_interaction(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/interaction", verbose: verbose).perform
   end
@@ -122,6 +131,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_media(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/media", verbose: verbose).perform
   end
@@ -132,6 +142,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_relation(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/relation", verbose: verbose).perform
   end
@@ -142,6 +153,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_source(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/source", verbose: verbose).perform
   end
@@ -152,6 +164,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_synonyms(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/synonyms", verbose: verbose).perform
   end
@@ -162,6 +175,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_treatment(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/treatment", verbose: verbose).perform
   end
@@ -172,6 +186,7 @@ module Colrapi
   # @param id [String] The taxon id
   # @param verbose [Boolean] Print headers to STDOUT
   #
+  # @return [Array, Boolean] An array of hashes
   def self.taxon_vernacular(dataset_id, id, verbose: false)
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/vernacular", verbose: verbose).perform
   end
