@@ -47,7 +47,14 @@ module Colrapi
       conn.headers["X-USER-AGENT"] = make_user_agent
 
       res = conn.get endpoint, opts
-      MultiJson.load(res.body)
+
+      # Handles ChecklistBank endpoints that do not return JSON
+      begin
+        MultiJson.load(res.body)
+      rescue MultiJson::ParseError
+        res.body
+      end
+      
     end
   end
 end

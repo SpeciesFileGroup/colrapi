@@ -41,4 +41,114 @@ module Colrapi
                 sort_by: sort_by, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get a taxon with @id from dataset @dataset_id via the taxon route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}", verbose: verbose).perform
+  end
+
+  # Get the classification for a taxon with @id from dataset @dataset_id via the taxon classification route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_classification(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/classification", verbose: verbose).perform
+  end
+
+  # Get the asserted distribution for a taxon with @id from dataset @dataset_id via the taxon distribution route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_distribution(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/distribution", verbose: verbose).perform
+  end
+
+  # Get info for a taxon with @id from dataset @dataset_id via the taxon info route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_info(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/info", verbose: verbose).perform
+  end
+
+  # Get biological interactions for a taxon with @id from dataset @dataset_id via the taxon interactions route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_interaction(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/interaction", verbose: verbose).perform
+  end
+
+  # Get media for a taxon with @id from dataset @dataset_id via the taxon media route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_media(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/media", verbose: verbose).perform
+  end
+
+  # Get relations for a taxon with @id from dataset @dataset_id via the taxon relation route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_relation(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/relation", verbose: verbose).perform
+  end
+
+  # Get sources for a taxon with @id from dataset @dataset_id via the taxon source route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_source(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/source", verbose: verbose).perform
+  end
+
+  # Get synonyms for a taxon with @id from dataset @dataset_id via the taxon synonyms route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_synonyms(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/synonyms", verbose: verbose).perform
+  end
+
+  # Get the treatment for a taxon with @id from dataset @dataset_id via the taxon treatment route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_treatment(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/treatment", verbose: verbose).perform
+  end
+
+  # Get the vernacular names for a taxon with @id from dataset @dataset_id via the taxon vernacular route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.taxon_vernacular(dataset_id, id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/vernacular", verbose: verbose).perform
+  end
+
 end
