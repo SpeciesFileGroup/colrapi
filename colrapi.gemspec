@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "simplecov", "~> 0.21.2"
   s.add_development_dependency "test-unit", "~> 3.3", ">= 3.3.6"
   s.add_development_dependency "vcr", "~> 6.0"
-  # s.add_development_dependency "webmock", "~> 3.14"
+  s.add_development_dependency "webmock", "~> 3.14"
 
   s.add_runtime_dependency "faraday", "~> 1.0"
   s.add_runtime_dependency "faraday_middleware", "~> 1.2" # requires 1.0
