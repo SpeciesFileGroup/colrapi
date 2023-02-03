@@ -11,6 +11,23 @@ module Colrapi
   define_setting :base_url, "https://api.checklistbank.org/"
   define_setting :mailto, ENV["COL_API_EMAIL"]
 
+  # Get names or a name from a dataset
+  #
+  # @param dataset_id [String] The dataset id
+  # @param name_id [String] The name id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.name(dataset_id, name_id: nil, offset: 0, limit: 10, verbose: false)
+    endpoint = "dataset/#{dataset_id}/name"
+    unless name_id.nil?
+      endpoint = "#{endpoint}/#{name_id}"
+      offset = nil
+      limit = nil
+    end
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
   # Search the nameusage route
   #
   # @param q [String] A query string
