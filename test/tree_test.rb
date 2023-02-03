@@ -14,6 +14,39 @@ class TestTree < Test::Unit::TestCase
     end
   end
 
+  def test_tree_offset_limit
+    VCR.use_cassette("test_tree_offset_limit") do
+      res = Colrapi.tree(@dataset_id, offset: 1, limit: 1)
+      assert_equal(1, res['offset'])
+      assert_equal(1, res['limit'])
+      assert_equal(2, res['total'])
+      assert_equal(@dataset_id, res['result'][0]['datasetKey'].to_s)
+      assert_equal('V', res['result'][0]['id'])
+      assert_equal('unranked', res['result'][0]['rank'])
+      assert_equal('accepted', res['result'][0]['status'])
+      assert_equal(28, res['result'][0]['childCount'])
+      assert_equal('Viruses', res['result'][0]['name'])
+      assert_equal('<i>Viruses</i>', res['result'][0]['labelHtml'])
+    end
+  end
+
+  def test_tree_offset_limit_child
+    VCR.use_cassette("test_tree_offset_limit_child") do
+      res = Colrapi.tree(@dataset_id, taxon_id: 'H6', children: true, offset: 11, limit: 1)
+      assert_equal(11, res['offset'])
+      assert_equal(1, res['limit'])
+      assert_equal(46, res['total'])
+      assert_equal(@dataset_id, res['result'][0]['datasetKey'].to_s)
+      assert_equal('6223S', res['result'][0]['id'])
+      assert_equal('H6', res['result'][0]['parentId'])
+      assert_equal('order', res['result'][0]['rank'])
+      assert_equal('accepted', res['result'][0]['status'])
+      assert_equal(4, res['result'][0]['childCount'])
+      assert_equal('Glosselytrodea', res['result'][0]['name'])
+      assert_equal('Glosselytrodea', res['result'][0]['labelHtml'])
+    end
+  end
+
   def test_tree_id
     VCR.use_cassette("test_tree_id") do
       res = Colrapi.tree(@dataset_id, taxon_id: '5T6MX')
@@ -79,5 +112,4 @@ class TestTree < Test::Unit::TestCase
       assert_equal('Cavalier-Smith, 2002', res['result'][2]['authorship'])
     end
   end
-
 end

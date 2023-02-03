@@ -179,14 +179,25 @@ module Colrapi
   # Get the root taxa
   #
   # @param dataset_id [String] The dataset id
-  # @param id [String] The taxon id
+  # @param taxon_id [String] The taxon id
+  # @param children [Boolean] Display the children of taxon_id
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
-  def self.tree(dataset_id, taxon_id: nil, children: false, verbose: false)
+  # @return [Array, Boolean] An array of hashes
+  def self.tree(dataset_id, taxon_id: nil, children: false, offset: 0, limit: 10, verbose: false)
     endpoint = "dataset/#{dataset_id}/tree"
     endpoint = "#{endpoint}/#{taxon_id}" unless taxon_id.nil?
     endpoint = "#{endpoint}/children" unless taxon_id.nil? or !children
-    Request.new(endpoint: endpoint, verbose: verbose).perform
+
+    if !taxon_id.nil? and !children
+      limit = nil
+      offset = nil
+    end
+
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
 end
