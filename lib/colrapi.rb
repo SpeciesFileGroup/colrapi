@@ -41,6 +41,14 @@ module Colrapi
                 sort_by: sort_by, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get the full list of taxon IDs for a dataset (returns 1 ID string per line, not JSON)
+  #
+  # @param dataset_id [String] The dataset id
+  #
+  def self.taxon_ids(dataset_id, verbose: false)
+    Request.new(endpoint: "dataset/#{dataset_id}/taxon/ids", verbose: verbose).perform
+  end
+
   # Get a taxon with @id from dataset @dataset_id via the taxon route
   #
   # @param dataset_id [String] The dataset id
