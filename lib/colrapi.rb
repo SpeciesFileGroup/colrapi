@@ -159,4 +159,17 @@ module Colrapi
     Request.new(endpoint: "dataset/#{dataset_id}/taxon/#{id}/vernacular", verbose: verbose).perform
   end
 
+  # Get the root taxa
+  #
+  # @param dataset_id [String] The dataset id
+  # @param id [String] The taxon id
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  def self.tree(dataset_id, taxon_id: nil, children: false, verbose: false)
+    endpoint = "dataset/#{dataset_id}/tree"
+    endpoint = "#{endpoint}/#{taxon_id}" unless taxon_id.nil?
+    endpoint = "#{endpoint}/children" unless taxon_id.nil? or !children
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
 end
