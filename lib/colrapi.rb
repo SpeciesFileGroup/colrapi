@@ -21,12 +21,15 @@ module Colrapi
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.name(dataset_id, name_id: nil, offset: 0, limit: 10, verbose: false)
+  def self.name(dataset_id, name_id: nil, subresource: nil, offset: 0, limit: 10, verbose: false)
     endpoint = "dataset/#{dataset_id}/name"
     unless name_id.nil?
       endpoint = "#{endpoint}/#{name_id}"
       offset = nil
       limit = nil
+    end
+    if !subresource.nil? and %w[relations synonyms types orphans].include? subresource
+      endpoint = "#{endpoint}/#{subresource}"
     end
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
