@@ -89,6 +89,28 @@ module Colrapi
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get a synonym with @synonym_id from dataset @dataset_id via the synonym route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param synonym_id [String] The synonym id
+  # @param subresource [String] The synonym subresource endpoint (source)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.synonym(dataset_id, synonym_id: nil, subresource: nil, offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/synonym"
+    unless synonym_id.nil?
+      endpoint = "#{endpoint}/#{synonym_id}"
+    end
+    if subresource == 'source'
+      endpoint = "#{endpoint}/source"
+    end
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
   # Get the full list of taxon IDs for a dataset (returns 1 ID string per line, not JSON)
   #
   # @param dataset_id [String] The dataset id
