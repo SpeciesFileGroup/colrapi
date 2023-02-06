@@ -66,6 +66,29 @@ module Colrapi
                 sort_by: sort_by, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get a reference with @reference_id from dataset @dataset_id via the reference route
+  #
+  # @param dataset_id [String] The dataset id
+  # @param reference_id [String] The reference id
+  # @param subresource [String] The reference subresource endpoint (orphans)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.reference(dataset_id, reference_id: nil, subresource: nil, offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/reference"
+    if subresource == 'orphans'
+      reference_id = nil
+      endpoint = "#{endpoint}/orphans"
+    end
+    unless reference_id.nil?
+      endpoint = "#{endpoint}/#{reference_id}"
+    end
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
   # Get the full list of taxon IDs for a dataset (returns 1 ID string per line, not JSON)
   #
   # @param dataset_id [String] The dataset id
@@ -78,7 +101,7 @@ module Colrapi
   # Get a taxon with @id from dataset @dataset_id via the taxon route
   #
   # @param dataset_id [String] The dataset id
-  # @param id [String] The taxon id
+  # @param taxon_id [String] The taxon id
   # @param subresource [String] The taxon subresource endpoint (classification, distribution, info, interaction, media,
   #   relation, source, synonyms, treatment, or vernacular)
   #
