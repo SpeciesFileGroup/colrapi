@@ -22,6 +22,27 @@ class TestTaxon < Test::Unit::TestCase
     end
   end
 
+  def test_taxon_offset
+    VCR.use_cassette("test_taxon_offset_limit") do
+      res = Colrapi.taxon(@dataset_id, offset: 3483, limit: 1)
+      assert_equal(3483, res['offset'])
+    end
+  end
+
+  def test_taxon_limit
+    VCR.use_cassette("test_taxon_offset_limit") do
+      res = Colrapi.taxon(@dataset_id, offset: 3483, limit: 1)
+      assert_equal(1, res['limit'])
+    end
+  end
+
+  def test_taxon_total
+    VCR.use_cassette("test_taxon_offset_limit") do
+      res = Colrapi.taxon(@dataset_id, offset: 3483, limit: 1)
+      assert_equal(2485345, res['total'])
+    end
+  end
+
   def test_taxon_classification_genus_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
@@ -251,14 +272,14 @@ class TestTaxon < Test::Unit::TestCase
 
   def test_taxon_vernacular_name
     VCR.use_cassette("test_taxon_vernacular") do
-      res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'vernacular', verbose: true)
+      res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'vernacular')
       assert_equal('Eurasian Elk', res[0]['name'])
     end
   end
 
   def test_taxon_vernacular_language
     VCR.use_cassette("test_taxon_vernacular") do
-      res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'vernacular', verbose: true)
+      res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'vernacular')
       assert_equal('eng', res[0]['language'])
     end
   end
