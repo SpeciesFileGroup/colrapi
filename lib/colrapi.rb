@@ -97,7 +97,7 @@ module Colrapi
     if !subresource.nil? and subresources.include? subresource
       endpoint = "#{endpoint}/#{subresource}"
     end
-    Request.new(endpoint: endpoint, verbose: verbose).perform
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
   # Get the root taxa
