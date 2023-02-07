@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class TestNameusage < Test::Unit::TestCase
+class TestNameusageSearch < Test::Unit::TestCase
   def setup
     @name = "Homo sapiens"
   end
@@ -22,7 +22,7 @@ class TestNameusage < Test::Unit::TestCase
     end
   end
 
-  def test_nameusage_search_rank
+  def test_nameusage_search_name_rank
     VCR.use_cassette("test_nameusage_search_rank") do
       res = Colrapi.nameusage_search(q: 'Atta', rank: 'genus')
       assert_equal('genus', res['result'][0]['classification'].last['rank'])
