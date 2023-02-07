@@ -86,7 +86,37 @@ module Colrapi
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
-  # Search the nameusage route
+  # Get name usages or a nameusage from a dataset
+  #   Note: Queries the PSQL database, whereas nameusage_search uses Elastic Search
+  #
+  # @param dataset_id [String] The dataset id
+  # @param nameusage_id [String] The nameusage id
+  # @param q [String] The scientific name or authorship search query
+  # @param rank [String] The rank of the taxon in the search query q
+  # @param nidx_id [String] The name index id
+  # @param subresource [String] The name subresource endpoint (relations, synonyms, types, or orphans)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.nameusage(dataset_id, nameusage_id: nil, q: nil, rank: nil, nidx_id: nil, subresource: nil,
+                     offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/nameusage"
+    unless nameusage_id.nil?
+      endpoint = "#{endpoint}/#{nameusage_id}"
+      offset = nil
+      limit = nil
+    end
+    unless subresource.nil?
+      endpoint = "#{endpoint}/#{subresource}"
+    end
+    Request.new(endpoint: endpoint, q: q, rank: rank, nidx_id: nidx_id, offset: offset, limit: limit,
+                verbose: verbose).perform
+  end
+
+  # Search the nameusage route, which uses Elastic Search
   #
   # @param q [String] A query string
   # @param dataset_id [String, nil] restricts name usage search within a dataset

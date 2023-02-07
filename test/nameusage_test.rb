@@ -2,40 +2,83 @@ require_relative "test_helper"
 
 class TestNameusage < Test::Unit::TestCase
   def setup
-    @name = "Homo sapiens"
+    @dataset_id = "9837"
   end
 
-  def test_nameusage_search
-    VCR.use_cassette("nameusage_search_test") do
-      res = Colrapi.nameusage_search(q: @name)
-      assert_equal(true, res['result'].length > 0)
-      assert_equal(Array, res['result'].class)
+  def test_nameusage
+    VCR.use_cassette("test_nameusage") do
+      res = Colrapi.nameusage(@dataset_id)
+      assert_equal('32', res['result'][0]['id'])
     end
   end
 
-  def test_nameusage_search_offset_limit
-    VCR.use_cassette("test_nameusage_search_offset_limit") do
-      res = Colrapi.nameusage_search(q: @name, offset: 2, limit: 1)
-      assert_equal(2, res['offset'])
-      assert_equal(1, res['limit'])
-
+  def test_nameusage_id_related
+    VCR.use_cassette("test_nameusage_id_related") do
+      res = Colrapi.nameusage(@dataset_id, nameusage_id: '32', subresource: 'related')
+      assert_equal(3, res[0]['datasetKey'])
     end
   end
 
-  def test_nameusage_search_rank
-    VCR.use_cassette("test_nameusage_search_rank") do
-      res = Colrapi.nameusage_search(q: 'Atta', rank: 'genus')
-      assert_equal('genus', res['result'][0]['classification'].last['rank'])
+  def test_nameusage_id_source
+    VCR.use_cassette("test_nameusage_id_source") do
+      res = Colrapi.nameusage(@dataset_id, nameusage_id: '32', subresource: 'source')
+      assert_equal('956103', res['sourceId'])
     end
   end
 
-  def test_nameusage_search_min_max_ranks
-    VCR.use_cassette("test_nameusage_search_min_max_ranks") do
-      res = Colrapi.nameusage_search(q: 'Alces alces', dataset_id: '9837',
-                                     min_rank: 'species', max_rank: 'genus', sort_by: 'TAXONOMIC')
-      assert_equal('genus', res['result'][0]['usage']['name']['rank'])
-      assert_equal(44, res['total'])
-      assert_equal('species', res['result'][9]['usage']['name']['rank'])
+  def test_nameusage_id
+    VCR.use_cassette("test_nameusage_id") do
+      res = Colrapi.nameusage(@dataset_id, nameusage_id: '32')
+      assert_equal('Caldiserica Mori et al., 2009', res['label'])
+    end
+  end
+
+  def test_nameusage_offset
+    VCR.use_cassette("test_nameusage_offset_limit") do
+      res = Colrapi.nameusage(@dataset_id, offset: 48, limit: 3)
+      assert_equal(48, res['offset'])
+    end
+  end
+
+  def test_nameusage_limit
+    VCR.use_cassette("test_nameusage_offset_limit") do
+      res = Colrapi.nameusage(@dataset_id, offset: 48, limit: 3)
+      assert_equal(3, res['limit'])
+    end
+  end
+
+  def test_nameusage_total
+    VCR.use_cassette("test_nameusage_offset_limit") do
+      res = Colrapi.nameusage(@dataset_id, offset: 48, limit: 3)
+      assert_equal(4716121, res['total'])
+    end
+  end
+
+  def test_nameusage_offset_limit_name
+    VCR.use_cassette("test_nameusage_offset_limit") do
+      res = Colrapi.nameusage(@dataset_id, offset: 48, limit: 3)
+      assert_equal('Cryptorrhynchus biguttatus', res['result'][1]['name']['scientificName'])
+    end
+  end
+
+  def test_nameusage_q
+    VCR.use_cassette("test_nameusage_q") do
+      res = Colrapi.nameusage(@dataset_id, q: 'Isoptera')
+      assert_equal('Scheff. ex Burck', res['result'][0]['name']['authorship'])
+    end
+  end
+
+  def test_nameusage_q_rank
+    VCR.use_cassette("test_nameusage_q_rank") do
+      res = Colrapi.nameusage(@dataset_id, q: 'Isoptera', rank: 'infraorder')
+      assert_equal('Brulle, 1832', res['result'][0]['name']['authorship'])
+    end
+  end
+
+  def test_nameusage_nidx_id
+    VCR.use_cassette("test_nameusage_nidx_id") do
+      res = Colrapi.nameusage(@dataset_id, nidx_id: 2403703)
+      assert_equal('Cryptoripersia corpulenta', res['result'][0]['name']['scientificName'])
     end
   end
 
