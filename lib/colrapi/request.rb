@@ -15,10 +15,34 @@ module Colrapi
       @verbose = args[:verbose]
       @q = args[:q]
       @content = args[:content]
+      @name = args[:name]
+      @authorship = args[:authorship]
+      @code = args[:code]
       @type = args[:type]
       @rank = args[:rank]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @within_superkingdom = args[:within_superkingdom]
+      @within_kingdom = args[:within_kingdom]
+      @within_subkingdom = args[:within_subkingdom]
+      @within_superphylum = args[:within_superphylum]
+      @within_phylum = args[:within_phylum]
+      @within_subphylum = args[:within_subphylum]
+      @within_superclass = args[:within_superclass]
+      @within_class = args[:within_class]
+      @within_subclass = args[:within_subclass]
+      @within_superorder = args[:within_superorder]
+      @within_order = args[:within_order]
+      @within_suborder = args[:within_suborder]
+      @within_superfamily = args[:within_superfamily]
+      @within_family = args[:within_family]
+      @within_subfamily = args[:within_subfamily]
+      @within_tribe = args[:within_tribe]
+      @within_subtribe = args[:within_subtribe]
+      @within_genus = args[:within_genus]
+      @within_subgenus = args[:within_subgenus]
+      @within_section = args[:within_section]
+      @within_species = args[:within_species]
       @sort_by = args[:sort_by]
       @limit = args[:limit]
       @offset = args[:offset]
@@ -26,8 +50,17 @@ module Colrapi
     end
 
     def perform
-      args = { q: @q, content: @content, type: @type, offset: @offset,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank, sortBy: @sort_by, limit: @limit }
+      args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, superkingdom: @within_superkingdom,
+               kingdom: @within_kingdom, subkingdom: @within_subkingdom,
+               superphylum: @within_superphylum, phylum: @within_phylum,
+               subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
+               subclass: @within_subclass, superorder: @within_superorder, order: @within_order,
+               suborder: @within_suborder, superfamily: @within_superfamily,
+               family: @within_family, subfamily: @within_subfamily,
+               tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
+               subgenus: @within_subgenus, section: @within_section,
+               species: @within_species, sortBy: @sort_by, offset: @offset, limit: @limit }
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
