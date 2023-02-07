@@ -43,6 +43,7 @@ module Colrapi
       @within_subgenus = args[:within_subgenus]
       @within_section = args[:within_section]
       @within_species = args[:within_species]
+      @nidx_id = args[:nidx_id]
       @sort_by = args[:sort_by]
       @limit = args[:limit]
       @offset = args[:offset]
@@ -60,7 +61,7 @@ module Colrapi
                family: @within_family, subfamily: @within_subfamily,
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
                subgenus: @within_subgenus, section: @within_section,
-               species: @within_species, sortBy: @sort_by, offset: @offset, limit: @limit }
+               species: @within_species, nidx: @nidx_id, sortBy: @sort_by, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
