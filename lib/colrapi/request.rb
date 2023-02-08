@@ -22,6 +22,27 @@ module Colrapi
       @rank = args[:rank]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @short_title = args[:short_title]
+      @private = args[:private]
+      @released_from = args[:released_from]
+      @contributes_to = args[:contributes_to]
+      @has_source_dataset = args[:has_source_dataset]
+      @has_gbif_id = args[:has_gbif_id]
+      @gbif_id = args[:gbif_id]
+      @gbif_publisher_id = args[:gbif_publisher_id]
+      @editor = args[:editor]
+      @reviewer = args[:reviewer]
+      @modified_by = args[:modified_by]
+      @origin = args[:origin]
+      @license = args[:license]
+      @row_type = args[:row_type]
+      @created_after = args[:created_after]
+      @created_before = args[:created_before]
+      @issued = args[:issued]
+      @issued_before = args[:issued]
+      @modified_after =  args[:modified_after]
+      @modified_before = args[:modified_before]
+      @min_size = args[:min_size]
       @within_superkingdom = args[:within_superkingdom]
       @within_kingdom = args[:within_kingdom]
       @within_subkingdom = args[:within_subkingdom]
@@ -45,6 +66,7 @@ module Colrapi
       @within_species = args[:within_species]
       @nidx_id = args[:nidx_id]
       @sort_by = args[:sort_by]
+      @reverse = args[:reverse]
       @limit = args[:limit]
       @offset = args[:offset]
       @options = args[:options] # TODO: not added at colrapi.rb
@@ -52,8 +74,14 @@ module Colrapi
 
     def perform
       args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank, superkingdom: @within_superkingdom,
-               kingdom: @within_kingdom, subkingdom: @within_subkingdom,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank,
+               alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
+               hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
+               gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
+               origin: @origin, license: @license, rowType: @row_type, created: @created_after,
+               createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
+               modifiedBefore: @modified_before, minSize: @min_size,
+               superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
                subclass: @within_subclass, superorder: @within_superorder, order: @within_order,
@@ -61,7 +89,8 @@ module Colrapi
                family: @within_family, subfamily: @within_subfamily,
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
                subgenus: @within_subgenus, section: @within_section,
-               species: @within_species, nidx: @nidx_id, sortBy: @sort_by, offset: @offset, limit: @limit}
+               species: @within_species, nidx: @nidx_id, sortBy: @sort_by, reverse: @reverse, offset: @offset,
+               limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose

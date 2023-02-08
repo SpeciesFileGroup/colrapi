@@ -11,6 +11,71 @@ module Colrapi
   define_setting :base_url, "https://api.checklistbank.org/"
   define_setting :mailto, ENV["COL_API_EMAIL"]
 
+  # Get dataset metadata
+  #
+  # For a specific dataset:
+  #  @param dataset_id [String] The dataset id
+  #  @param attempt [Integer] Returns archived metadata for a past import attempt number
+  #
+  # Search datasets:
+  #   @param q [String] A search query for datasets
+  #   @param short_title [String] A dataset alias
+  #   @param code [String] The nomenclatural code (bacterial, botanical, cultivars, phytosociological, virus, zoological)
+  #   @param private [Boolean] Whether the dataset is private or not
+  #   @param released_from [Integer] Filter by a project id that a dataset was released from
+  #   @param contributes_to [Integer] Filter by a project id that a dataset contributes to
+  #   @param has_source_dataset [Boolean] Filter by if source datasets contribute to the project dataset
+  #   @param has_gbif_id [Boolean] Whether the dataset has a GBIF registry id
+  #   @param gbif_id [String] The GBIF registry id
+  #   @param gbif_publisher_id [String] Filter by a GBIF publisher's id
+  #   @param editor [Integer] Filter by an editor's user id
+  #   @param reviewer [Integer] Filter by a reviewer's user id
+  #   @param modified_by [Integer] Filter by a user id  on last modified by
+  #   @param origin [Array, String] Filter by the origin of a dataset (external, project, release, xrelease)
+  #   @param type [Array, String] Filter by the dataset type (nomenclatural, taxonomic, phylogenetic, article, legal, thematic, other)
+  #   @param license [Array, String] Filter by the license type (cc0, cc_by, cc_by_sa, cc_by_nc, cc_by_nd, cc_by_nc_sa, cc_by_nc_nd, unspecified, other)
+  #   @param row_type [Array, String] Filter by datasets that include a row type (e.g., acef:AcceptedSpecies, col:Taxon, dwc:Taxon)
+  #   @param created_after [Date] Filter by created after date
+  #   @param created_before [Date] Filter by created before date
+  #   @param issued_after [Date] Filter by issued after date
+  #   @param issued_before [Date] Filter by issued before date
+  #   @param modified_after [Date] Filter by modified after date
+  #   @param modified_before [Date] Filter by modified before date
+  #   @param min_size [Integer] Filter by minimum record size
+  #
+  #   @param sort_by [String] Sort by (key, alias, title, creator, relevance, created, modified, imported, size)
+  #   @param reverse [Boolean] Sort in reverse
+  #   @param offset [Integer] Offset for pagination
+  #   @param limit [Integer] Limit for pagination
+  #   @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.dataset(dataset_id: nil, attempt: nil, q: nil, short_title: nil, code: nil, private: nil, released_from: nil,
+                   contributes_to: nil, has_source_dataset: nil, has_gbif_id: nil, gbif_id: nil, gbif_publisher_id: nil,
+                   editor: nil, reviewer: nil, modified_by: nil, origin: nil, type: nil, license: nil, row_type: nil,
+                   created_after: nil, created_before: nil, issued_after: nil, issued_before: nil, modified_after: nil,
+                   modified_before: nil, min_size: nil, sort_by: nil, reverse: nil, offset: nil, limit: nil,
+                   verbose: false)
+    endpoint = "dataset"
+    unless dataset_id.nil?
+      endpoint = "#{endpoint}/#{dataset_id}"
+      unless attempt.nil?
+        endpoint = "#{endpoint}/#{attempt}"
+      end
+      endpoint = "#{endpoint}.json"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    else
+      Request.new(endpoint: endpoint, q: q, short_title: short_title, code: code, private: private,
+                  released_from: released_from, contributes_to: contributes_to, has_source_dataset: has_source_dataset,
+                  has_gbif_id: has_gbif_id, gbif_id: gbif_id, gbif_publisher_id: gbif_publisher_id, editor: editor,
+                  reviewer: reviewer, modified_by: modified_by, origin: origin, type: type, license: license,
+                  row_type: row_type, created_after: created_after, created_before: created_before,
+                  issued_after: issued_after, issued_before: issued_before, modified_after: modified_after,
+                  modified_before: modified_before, min_size: min_size, sort_by: sort_by, reverse: reverse,
+                  offset: offset, limit: limit, verbose: verbose).perform
+    end
+  end
+
   # Get names or a name from a dataset
   #
   # @param dataset_id [String] The dataset id
