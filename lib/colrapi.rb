@@ -76,6 +76,30 @@ module Colrapi
     end
   end
 
+  # Get importer status
+  #
+  # @param dataset_id [String] Calls the dataset_id endpoint /importer/{dataset_id}
+  # @param dataset_id_filter [String] Filters the importer queue by dataset_id
+  # @param state [String] The import status (e.g., waiting, preparing, downloading, processing, inserting, ...)
+  # @param running [Boolean] Filter by actively importing datasets
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.importer(dataset_id: nil, dataset_id_filter: nil, state: nil, running: nil, offset: nil, limit: nil,
+                    verbose: false)
+    endpoint = "importer"
+    if dataset_id.nil?
+      Request.new(endpoint: endpoint, dataset_id_filter: dataset_id_filter, state: state, running: running,
+                  offset: offset, limit: limit, verbose: verbose).perform
+    else
+      endpoint = "#{endpoint}/#{dataset_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
+
   # Get names or a name from a dataset
   #
   # @param dataset_id [String] The dataset id
@@ -127,6 +151,40 @@ module Colrapi
                 within_section: within_section, within_species: within_species, verbose: verbose).perform
   end
 
+  # Get metrics for the *last successful* import of a dataset or a specific import_attempt
+  #
+  # @param dataset_id [String] The dataset id
+  # @param import_attempt [Integer] The import attempt
+  #
+  # @return [Array, Hash, Boolean] An array of hashes
+  def self.metrics(dataset_id, import_attempt: nil, verbose: false)
+
+    import = self.importer(dataset_id: dataset_id)
+    unless %w[unchanged finished].include? import['state']
+      return {"code" => 400, 'message' => 'Dataset has not finished importing or failed to import'}
+    end
+
+    # it's necessary to get the last finished import attempt because status=unchanged import results don't have metrics
+    #   project release datasets do not seem to have import_attempts or should be taken from the project dataset, e.g.:
+    #     https://api.checklistbank.org/dataset/3/import/107 == https://api.checklistbank.org/dataset/9837/import
+    if import_attempt.nil?
+      import = self.importer(dataset_id_filter: dataset_id, state: 'finished')
+      if import['total'] > 0
+        import_attempt = import['result'][0]['attempt']
+      end
+    end
+
+    endpoint = "dataset/#{dataset_id}/import"
+    if !import_attempt.nil?
+      endpoint = "#{endpoint}/#{import_attempt}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    else
+      # /dataset/{id}/import returns an array of 1 item while /dataset/{id}/import/{attempt} doesn't
+      res = Request.new(endpoint: endpoint, verbose: verbose).perform
+      res[0]
+    end
+  end
+
   # Get names or a name from a dataset
   #
   # @param dataset_id [String] The dataset id
@@ -149,6 +207,40 @@ module Colrapi
       endpoint = "#{endpoint}/#{subresource}"
     end
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
+  # Get a text list of names for a dataset
+  #
+  # @param dataset_id [String] The dataset id
+  # @param import_attempt [Integer] The import attempt number
+  #
+  def self.name_list(dataset_id, import_attempt: nil, verbose: nil)
+
+    # get last import attempt number if none given
+    if import_attempt.nil?
+      import = self.importer(dataset_id: dataset_id)
+      import_attempt = import['attempt']
+    end
+
+    endpoint = "dataset/#{dataset_id}/import/#{import_attempt}/names"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
+  # Get a text tree of names for a dataset
+  #
+  # @param dataset_id [String] The dataset id
+  # @param import_attempt [Integer] The import attempt number
+  #
+  def self.name_tree(dataset_id, import_attempt: nil, verbose: nil)
+
+    # get last import attempt number if none given
+    if import_attempt.nil?
+      import = self.importer(dataset_id: dataset_id)
+      import_attempt = import['attempt']
+    end
+
+    endpoint = "dataset/#{dataset_id}/import/#{import_attempt}/tree"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
   end
 
   # Get name usages or a nameusage from a dataset

@@ -22,6 +22,7 @@ module Colrapi
       @rank = args[:rank]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @dataset_id_filter = args[:dataset_id_filter]
       @short_title = args[:short_title]
       @private = args[:private]
       @released_from = args[:released_from]
@@ -69,12 +70,14 @@ module Colrapi
       @reverse = args[:reverse]
       @limit = args[:limit]
       @offset = args[:offset]
+      @state = args[:state]
+      @running = args[:running]
       @options = args[:options] # TODO: not added at colrapi.rb
     end
 
     def perform
       args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, datasetKey: @dataset_id_filter,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
@@ -88,9 +91,9 @@ module Colrapi
                suborder: @within_suborder, superfamily: @within_superfamily,
                family: @within_family, subfamily: @within_subfamily,
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
-               subgenus: @within_subgenus, section: @within_section,
-               species: @within_species, nidx: @nidx_id, sortBy: @sort_by, reverse: @reverse, offset: @offset,
-               limit: @limit}
+               subgenus: @within_subgenus, section: @within_section, species: @within_species,
+               nidx: @nidx_id, state: @state, running: @running,
+               sortBy: @sort_by, reverse: @reverse, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
