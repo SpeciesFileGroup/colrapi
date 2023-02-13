@@ -22,6 +22,7 @@ module Colrapi
       @rank = args[:rank]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @dataset_id_filter = args[:dataset_id_filter]
       @short_title = args[:short_title]
       @private = args[:private]
       @released_from = args[:released_from]
@@ -72,6 +73,8 @@ module Colrapi
       @reverse = args[:reverse]
       @limit = args[:limit]
       @offset = args[:offset]
+      @state = args[:state]
+      @running = args[:running]
       @options = args[:options] # TODO: not added at colrapi.rb
     end
 
@@ -83,7 +86,7 @@ module Colrapi
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
                origin: @origin, license: @license, rowType: @row_type, created: @created_after,
                createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
-               modifiedBefore: @modified_before, minSize: @min_size, issue: @issue,
+               modifiedBefore: @modified_before, minSize: @min_size, issue: @issue, datasetKey: @dataset_id_filter,
                superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
@@ -91,9 +94,9 @@ module Colrapi
                suborder: @within_suborder, superfamily: @within_superfamily,
                family: @within_family, subfamily: @within_subfamily,
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
-               subgenus: @within_subgenus, section: @within_section,
-               species: @within_species, nidx: @nidx_id, sortBy: @sort_by, reverse: @reverse, offset: @offset,
-               limit: @limit}
+               subgenus: @within_subgenus, section: @within_section, species: @within_species,
+               nidx: @nidx_id, state: @state, running: @running,
+               sortBy: @sort_by, reverse: @reverse, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
