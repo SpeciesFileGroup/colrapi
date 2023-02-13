@@ -76,6 +76,45 @@ module Colrapi
     end
   end
 
+  # Get data quality issues
+  #
+  # @param dataset_id [String] The dataset id
+  # @param issue [String] Filter by data quality issue (e.g., ACCEPTED_NAME_MISSING, DUPLICATE_NAME, URL_INVALID)
+  # @param mode [String] Verbatim (default) or interpreted
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Hash, Boolean] An array of hashes
+  def self.issues(dataset_id, issue: nil, mode: 'verbatim', offset: nil, limit: nil, verbose: false)
+    if issue.nil?
+      metrics = Request.new(endpoint: "/dataset/#{dataset_id}/import?state=finished").perform
+      return {"issuesCount" => metrics[0]['issuesCount']}
+    else
+      if mode == 'interpreted'
+        issues = self.vocab(term: 'issue')
+        record_type = 'any'
+        issues.each do |i|
+          if i['name'] == issue.downcase
+            record_type = i['group']
+          end
+        end
+
+        # TODO: so far issues are only filterable on nameusage/search and /reference
+        #   for other record_types, may need to add other endpoints in the future
+        if record_type == 'reference'
+          self.reference(dataset_id, issue: issue, offset: offset, limit: limit, verbose: verbose)
+        else
+          self.nameusage_search(dataset_id: dataset_id, issue: issue, facet: 'issue', offset: offset, limit: limit,
+                              verbose: verbose)
+        end
+      else
+        self.verbatim(dataset_id, issue: issue, offset: offset, limit: limit, verbose: verbose)
+      end
+    end
+  end
+
   # Get importer status
   #
   # @param dataset_id [String] Calls the dataset_id endpoint /importer/{dataset_id}
@@ -279,19 +318,23 @@ module Colrapi
   # @param dataset_id [String, nil] restricts name usage search within a dataset
   # @param endpoint [String, nil] some endpoints have nested options
   # @param content [String, nil] restrict search to SCIENTIFIC_NAME, or AUTHORSHIP
+  # @param issue [Array, String, nil] the data quality issue
   # @param type [String, nil] sets the type of search to PREFIX, WHOLE_WORDS, or EXACT
   # @param rank [String, nil] taxonomic rank of name usages
   # @param min_rank [String, nil] minimum taxonomic rank of name usages
   # @param max_rank [String, nil] maximum taxonomic rank of name usages
-  # @param sort_by [String, nil] sort results by NAME, TAXONOMIC, INDEX_NAME_ID, NATIVE, or RELEVANCE
+  # @param facet [Array, String, nil] the search facet
   #
+  # @param sort_by [String, nil] sort results by NAME, TAXONOMIC, INDEX_NAME_ID, NATIVE, or RELEVANCE
+  # @param reverse [Boolean] sort in reverse order
   # @param offset [Integer] Offset for pagination
   # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.nameusage_search(q: nil, dataset_id: nil, endpoint: 'nameusage/search', content: nil, type: nil,
-                            rank: nil, min_rank: nil, max_rank: nil, sort_by: nil, offset: nil, limit: nil,
+  def self.nameusage_search(q: nil, dataset_id: nil, endpoint: 'nameusage/search', content: nil, issue: nil,
+                            type: nil, rank: nil, min_rank: nil, max_rank: nil, facet: nil,
+                            sort_by: nil, reverse: nil, offset: nil, limit: nil,
                             verbose: false)
 
     # a nil dataset_id will search name usages from all datasets in ChecklistBank
@@ -299,9 +342,9 @@ module Colrapi
       endpoint = "dataset/#{dataset_id}/nameusage/search"
     end
 
-    Request.new(endpoint: endpoint, q: q, content: content, type: type,
-                rank: rank, min_rank: min_rank, max_rank: max_rank,
-                sort_by: sort_by, offset: offset, limit: limit, verbose: verbose).perform
+    Request.new(endpoint: endpoint, q: q, content: content, issue: issue, type: type,
+                rank: rank, min_rank: min_rank, max_rank: max_rank, facet: facet,
+                sort_by: sort_by, reverse: reverse, offset: offset, limit: limit, verbose: verbose).perform
   end
 
   # Get a reference with @reference_id from dataset @dataset_id via the reference route
@@ -309,13 +352,15 @@ module Colrapi
   # @param dataset_id [String] The dataset id
   # @param reference_id [String] The reference id
   # @param subresource [String] The reference subresource endpoint (orphans)
+  # @param issue [String] The data quality issue (https://api.checklistbank.org/vocab/issue)
   #
   # @param offset [Integer] Offset for pagination
   # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.reference(dataset_id, reference_id: nil, subresource: nil, offset: nil, limit: nil, verbose: false)
+  def self.reference(dataset_id, reference_id: nil, subresource: nil, issue: nil, offset: nil, limit: nil,
+                     verbose: false)
     endpoint = "dataset/#{dataset_id}/reference"
     if subresource == 'orphans'
       reference_id = nil
@@ -324,7 +369,7 @@ module Colrapi
     unless reference_id.nil?
       endpoint = "#{endpoint}/#{reference_id}"
     end
-    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+    Request.new(endpoint: endpoint, issue: issue, offset: offset, limit: limit, verbose: verbose).perform
   end
 
   # Get a synonym with @synonym_id from dataset @dataset_id via the synonym route
@@ -428,5 +473,21 @@ module Colrapi
       endpoint = "#{endpoint}/#{verbatim_id}"
       Request.new(endpoint: endpoint, verbose: verbose).perform
     end
+  end
+
+  # Get vocab
+  # @param term [String] The vocab term
+  # @param subresource [String] The subresource which is usually the id, code, or name
+  # @param children [Boolean] Returns the geotime's children if true
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array]
+  def self.vocab(term: nil, subresource: nil, children: false, verbose: false)
+    endpoint = "vocab"
+    endpoint = "#{endpoint}/#{term}" unless term.nil?
+    endpoint = "#{endpoint}/#{subresource}" unless term.nil? or subresource.nil?
+    endpoint = "#{endpoint}/children" if children and term == "geotime"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
   end
 end
