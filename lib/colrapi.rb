@@ -401,4 +401,32 @@ module Colrapi
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get verbatim data
+  #
+  # @param dataset_id [String] The dataset id
+  # @param verbatim_id [String] The verbatim id
+  # @param q [String] The search query string
+  # @param issue [Array, String] Filter by data quality issue (e.g., ACCEPTED_NAME_MISSING, DUPLICATE_NAME, URL_INVALID)
+  # @param type [Array, String] The file type (e.g., acef:AcceptedSpecies, col:Taxon, dwc:Taxon)
+  #
+  # TODO: May not work yet: https://github.com/CatalogueOfLife/backend/issues/1201
+  #   @param term [Array, String] Filter by term (http://api.checklistbank.org/vocab/term)
+  #   @param term_operator [String] The operator to use with term ('and' or 'or')
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.verbatim(dataset_id, verbatim_id: nil, q: nil, issue: nil, type: nil, term: nil, term_operator: nil,
+                    offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/verbatim"
+    if verbatim_id.nil?
+      Request.new(endpoint: endpoint, q: q, issue: issue, type: type, term: term, term_operator: term_operator,
+                  offset: offset, limit: limit, verbose: verbose).perform
+    else
+      endpoint = "#{endpoint}/#{verbatim_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
 end

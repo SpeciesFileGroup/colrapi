@@ -39,6 +39,9 @@ module Colrapi
       @row_type = args[:row_type]
       @created_after = args[:created_after]
       @created_before = args[:created_before]
+      @issue = args[:issue]
+      @term = args[:term]
+      @term_operator = args[:term_operator]
       @issued = args[:issued]
       @issued_before = args[:issued]
       @modified_after =  args[:modified_after]
@@ -77,13 +80,13 @@ module Colrapi
 
     def perform
       args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank, datasetKey: @dataset_id_filter,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, term: @term, term_operator: @term_operator,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
                origin: @origin, license: @license, rowType: @row_type, created: @created_after,
                createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
-               modifiedBefore: @modified_before, minSize: @min_size,
+               modifiedBefore: @modified_before, minSize: @min_size, issue: @issue, datasetKey: @dataset_id_filter,
                superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
