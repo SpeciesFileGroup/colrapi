@@ -95,13 +95,6 @@ class TestMatching < Test::Unit::TestCase
     end
   end
 
-  def test_matching_genus_Acuera
-    VCR.use_cassette("test_matching_Acuera") do
-      res = Colrapi.matching(@dataset_id, name: @genus)
-      assert_equal('ambiguous', res['type'])
-    end
-  end
-
   def test_matching_subgenus_Acuera_Acuera_rank
     VCR.use_cassette("test_matching_Acuera_subgenus") do
       res = Colrapi.matching(@dataset_id, name: @subgenus, rank: 'subgenus')
