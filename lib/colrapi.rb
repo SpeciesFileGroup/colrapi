@@ -76,6 +76,18 @@ module Colrapi
     end
   end
 
+  # Get duplicate names
+  #
+  # @param dataset_id [String] The dataset id
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  def self.duplicate(dataset_id, offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/duplicate"
+    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
   # Get data quality issues
   #
   # @param dataset_id [String] The dataset id
