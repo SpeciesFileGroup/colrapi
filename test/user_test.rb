@@ -3,8 +3,8 @@ require_relative "test_helper"
 class TestUser < Test::Unit::TestCase
   def setup
     @user_id = 182
-    @user = 'speciesfilegroup'
-    @password = ENV['SECRET']
+    @user = ENV['USER']
+    @password = ENV['PASSWORD']
     @token = Colrapi.user_login(@user, @password)
   end
 
