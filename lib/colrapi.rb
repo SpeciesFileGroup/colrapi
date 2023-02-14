@@ -458,6 +458,44 @@ module Colrapi
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get user data
+  #
+  # @param user_id [Integer, nil] The user id
+  # @param q [String, nil] The search query
+  # @param role [String, nil] The user role (admin, editor, or reviewer)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param token [String, nil] The bearer token from retrieved with Colrapi.user_login(user, password)
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.user(user_id: nil, q: nil, role: nil, offset: nil, limit: nil, token: nil, verbose: false)
+    if user_id.nil?
+      endpoint = "user"
+      Request.new(endpoint: endpoint, q: q, role: role, offset: offset, limit: limit, token: token,
+                  verbose: verbose).perform
+    else
+      endpoint = "user/#{user_id}"
+      Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
+    end
+  end
+
+  # Authenticate user and get bearer token
+  def self.user_login(user, password, verbose: false)
+    Request.new(endpoint: "user/login", user: user, password: password, verbose: verbose).perform
+  end
+
+  # Get the authenticated user
+  #
+  # @param token [String, nil] The bearer token from retrieved with Colrapi.user_login(user, password)
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.user_me(token, verbose: false)
+    Request.new(endpoint: "user/me", token: token, verbose: verbose).perform
+  end
+
   # Get verbatim data
   #
   # @param dataset_id [String] The dataset id

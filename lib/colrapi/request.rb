@@ -75,6 +75,9 @@ module Colrapi
       @offset = args[:offset]
       @state = args[:state]
       @running = args[:running]
+      @user = args[:user]
+      @password = args[:password]
+      @token = args[:token]
       @options = args[:options] # TODO: not added at colrapi.rb
     end
 
@@ -101,17 +104,24 @@ module Colrapi
 
       conn = if verbose
                Faraday.new(url: Colrapi.base_url, request: options || []) do |f|
+                 if !@user.nil? and !@password.nil?
+                   f.request(:basic_auth, @user, @password)
+                 end
                  f.response :logger
                  f.use FaradayMiddleware::RaiseHttpException
                  f.adapter Faraday.default_adapter
                end
              else
                Faraday.new(url: Colrapi.base_url, request: options || []) do |f|
+                 if !@user.nil? and !@password.nil?
+                   f.request(:basic_auth, @user, @password)
+                 end
                  f.use FaradayMiddleware::RaiseHttpException
                  f.adapter Faraday.default_adapter
                end
              end
 
+      conn.headers['Authorization'] = "Bearer #{@token}" unless @token.nil?
       conn.headers[:user_agent] = make_user_agent
       conn.headers["X-USER-AGENT"] = make_user_agent
 
