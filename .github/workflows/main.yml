@@ -15,5 +15,5 @@ jobs:
     - name: Run the default task
       run: bundle exec rake
       env:
-        USER: ${{ env.USER }}
+        USER: ${{ vars.USER }}
         PASSWORD: ${{ secrets.PASSWORD }}
