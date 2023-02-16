@@ -224,24 +224,24 @@ module Colrapi
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.matching(dataset_id, name: nil, authorship: nil, code: nil, rank: nil, within_superkingdom: nil,
-                    within_kingdom: nil, within_subkingdom: nil, within_superphylum: nil, within_phylum: nil,
-                    within_subphylum: nil, within_superclass: nil, within_class: nil, within_subclass: nil,
-                    within_superorder: nil, within_order: nil, within_suborder: nil, within_superfamily: nil,
-                    within_family: nil, within_subfamily: nil, within_tribe: nil, within_subtribe: nil,
-                    within_genus: nil, within_subgenus: nil, within_section: nil, within_species: nil,
-                    verbose: false)
-    endpoint = "dataset/#{dataset_id}/matching"
-    Request.new(endpoint: endpoint, name: name, authorship: authorship, code: code, rank: rank,
-                within_superkingdom: within_superkingdom, within_kingdom: within_kingdom,
-                within_subkingdom: within_subkingdom, within_superphylum: within_superphylum,
-                within_phylum: within_phylum, within_subphylum: within_subphylum, within_superclass: within_superclass,
-                within_class: within_class, within_subclass: within_subclass, within_superorder: within_superorder,
-                within_order: within_order, within_suborder: within_suborder, within_superfamily: within_superfamily,
-                within_family: within_family, within_subfamily: within_subfamily, within_tribe: within_tribe,
-                within_subtribe: within_subtribe, within_genus: within_genus, within_subgenus: within_subgenus,
-                within_section: within_section, within_species: within_species, verbose: verbose).perform
-  end
+  # def self.matching(dataset_id, name: nil, authorship: nil, code: nil, rank: nil, within_superkingdom: nil,
+  #                   within_kingdom: nil, within_subkingdom: nil, within_superphylum: nil, within_phylum: nil,
+  #                   within_subphylum: nil, within_superclass: nil, within_class: nil, within_subclass: nil,
+  #                   within_superorder: nil, within_order: nil, within_suborder: nil, within_superfamily: nil,
+  #                   within_family: nil, within_subfamily: nil, within_tribe: nil, within_subtribe: nil,
+  #                   within_genus: nil, within_subgenus: nil, within_section: nil, within_species: nil,
+  #                   verbose: false)
+  #   endpoint = "dataset/#{dataset_id}/matching"
+  #   Request.new(endpoint: endpoint, name: name, authorship: authorship, code: code, rank: rank,
+  #               within_superkingdom: within_superkingdom, within_kingdom: within_kingdom,
+  #               within_subkingdom: within_subkingdom, within_superphylum: within_superphylum,
+  #               within_phylum: within_phylum, within_subphylum: within_subphylum, within_superclass: within_superclass,
+  #               within_class: within_class, within_subclass: within_subclass, within_superorder: within_superorder,
+  #               within_order: within_order, within_suborder: within_suborder, within_superfamily: within_superfamily,
+  #               within_family: within_family, within_subfamily: within_subfamily, within_tribe: within_tribe,
+  #               within_subtribe: within_subtribe, within_genus: within_genus, within_subgenus: within_subgenus,
+  #               within_section: within_section, within_species: within_species, verbose: verbose).perform
+  # end
 
   # Get metrics for the *last successful* import of a dataset or a specific import_attempt
   #
