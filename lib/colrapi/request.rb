@@ -46,6 +46,7 @@ module Colrapi
       @issued_before = args[:issued]
       @modified_after =  args[:modified_after]
       @modified_before = args[:modified_before]
+      @last_synced_before = args[:last_synced_before]
       @min_size = args[:min_size]
       @within_superkingdom = args[:within_superkingdom]
       @within_kingdom = args[:within_kingdom]
@@ -68,6 +69,11 @@ module Colrapi
       @within_subgenus = args[:within_subgenus]
       @within_section = args[:within_section]
       @within_species = args[:within_species]
+      @without_data = args[:without_data]
+      @broken = args[:broken]
+      @subject_dataset_id = args[:subject_dataset_id]
+      @mode = args[:mode]
+      @subject = args[:subject]
       @nidx_id = args[:nidx_id]
       @sort_by = args[:sort_by]
       @reverse = args[:reverse]
@@ -89,7 +95,8 @@ module Colrapi
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
                origin: @origin, license: @license, rowType: @row_type, created: @created_after,
                createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
-               modifiedBefore: @modified_before, minSize: @min_size, issue: @issue, datasetKey: @dataset_id_filter,
+               modifiedBefore: @modified_before, lastSync: @last_synced_before, minSize: @min_size, issue: @issue,
+               datasetKey: @dataset_id_filter, withoutData: @without_data,
                superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
@@ -99,6 +106,7 @@ module Colrapi
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
                subgenus: @within_subgenus, section: @within_section, species: @within_species,
                nidx: @nidx_id, state: @state, running: @running,
+               broken: @broken, subjectDatasetKey: @subject_dataset_id, mode: @mode, subject: @subject,
                sortBy: @sort_by, reverse: @reverse, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
@@ -122,6 +130,7 @@ module Colrapi
              end
 
       conn.headers['Authorization'] = "Bearer #{@token}" unless @token.nil?
+      conn.headers['Accept'] = 'application/json,*/*'
       conn.headers[:user_agent] = make_user_agent
       conn.headers["X-USER-AGENT"] = make_user_agent
 
