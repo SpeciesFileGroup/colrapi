@@ -76,6 +76,36 @@ module Colrapi
     end
   end
 
+  # Get project decisions
+  #
+  # @param dataset_id [String] The dataset id
+  # @param decision_id [Integer, nil] The decision id
+  # @param name [String, nil] The scientific name to match
+  # @param rank [String, nil] The rank of the scientific name
+  # @param modified_by [Integer, nil] Filter by a user id  on last modified by
+  # @param broken [Boolean, nil] Whether the decision is broken or not
+  # @param subject_dataset_id [String, nil] The source dataset id
+  # @param mode [String, nil] The type of decision (block, reviewed, update, update_recursive, ignore)
+  # @param subject [Boolean, nil] TODO: what does this do? All decisions with subject=true are bare names, so maybe it checks if the subject taxon exists?
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] A result hash
+  def self.decision(dataset_id, decision_id: nil, name: nil, rank: nil, modified_by: nil, broken: nil,
+                    subject_dataset_id: nil, mode: nil, subject: nil, offset: nil, limit: nil, verbose: false)
+    if decision_id.nil?
+      endpoint = "dataset/#{dataset_id}/decision"
+      Request.new(endpoint: endpoint, name: name, rank: rank, modified_by: modified_by, broken: broken,
+                  subject_dataset_id: subject_dataset_id, mode: mode, subject: subject, offset: offset,
+                  limit: limit, verbose: verbose).perform
+    else
+      endpoint = "dataset/#{dataset_id}/decision/#{decision_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
+
   # Get duplicate names
   #
   # @param dataset_id [String] The dataset id
