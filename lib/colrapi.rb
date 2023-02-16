@@ -76,6 +76,36 @@ module Colrapi
     end
   end
 
+  # Get project decisions
+  #
+  # @param dataset_id [String] The dataset id
+  # @param decision_id [Integer, nil] The decision id
+  # @param name [String, nil] The scientific name to match
+  # @param rank [String, nil] The rank of the scientific name
+  # @param modified_by [Integer, nil] Filter by a user id  on last modified by
+  # @param broken [Boolean, nil] Whether the decision is broken or not
+  # @param subject_dataset_id [String, nil] The source dataset id
+  # @param mode [String, nil] The type of decision (block, reviewed, update, update_recursive, ignore)
+  # @param subject [Boolean, nil] TODO: what does this do? All decisions with subject=true are bare names, so maybe it checks if the subject taxon exists?
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] A result hash
+  def self.decision(dataset_id, decision_id: nil, name: nil, rank: nil, modified_by: nil, broken: nil,
+                    subject_dataset_id: nil, mode: nil, subject: nil, offset: nil, limit: nil, verbose: false)
+    if decision_id.nil?
+      endpoint = "dataset/#{dataset_id}/decision"
+      Request.new(endpoint: endpoint, name: name, rank: rank, modified_by: modified_by, broken: broken,
+                  subject_dataset_id: subject_dataset_id, mode: mode, subject: subject, offset: offset,
+                  limit: limit, verbose: verbose).perform
+    else
+      endpoint = "dataset/#{dataset_id}/decision/#{decision_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
+
   # Get duplicate names
   #
   # @param dataset_id [String] The dataset id
@@ -86,6 +116,17 @@ module Colrapi
   def self.duplicate(dataset_id, offset: nil, limit: nil, verbose: false)
     endpoint = "dataset/#{dataset_id}/duplicate"
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
+  # Get editor info
+  #
+  # @param dataset_id [String] The dataset id
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
+  #
+  # # @return [Array, Hash, Boolean] An array of hashes
+  def self.editor(dataset_id, token, verbose: false)
+    endpoint = "dataset/#{dataset_id}/editor"
+    Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
   end
 
   # Get data quality issues
@@ -183,24 +224,24 @@ module Colrapi
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.matching(dataset_id, name: nil, authorship: nil, code: nil, rank: nil, within_superkingdom: nil,
-                    within_kingdom: nil, within_subkingdom: nil, within_superphylum: nil, within_phylum: nil,
-                    within_subphylum: nil, within_superclass: nil, within_class: nil, within_subclass: nil,
-                    within_superorder: nil, within_order: nil, within_suborder: nil, within_superfamily: nil,
-                    within_family: nil, within_subfamily: nil, within_tribe: nil, within_subtribe: nil,
-                    within_genus: nil, within_subgenus: nil, within_section: nil, within_species: nil,
-                    verbose: false)
-    endpoint = "dataset/#{dataset_id}/matching"
-    Request.new(endpoint: endpoint, name: name, authorship: authorship, code: code, rank: rank,
-                within_superkingdom: within_superkingdom, within_kingdom: within_kingdom,
-                within_subkingdom: within_subkingdom, within_superphylum: within_superphylum,
-                within_phylum: within_phylum, within_subphylum: within_subphylum, within_superclass: within_superclass,
-                within_class: within_class, within_subclass: within_subclass, within_superorder: within_superorder,
-                within_order: within_order, within_suborder: within_suborder, within_superfamily: within_superfamily,
-                within_family: within_family, within_subfamily: within_subfamily, within_tribe: within_tribe,
-                within_subtribe: within_subtribe, within_genus: within_genus, within_subgenus: within_subgenus,
-                within_section: within_section, within_species: within_species, verbose: verbose).perform
-  end
+  # def self.matching(dataset_id, name: nil, authorship: nil, code: nil, rank: nil, within_superkingdom: nil,
+  #                   within_kingdom: nil, within_subkingdom: nil, within_superphylum: nil, within_phylum: nil,
+  #                   within_subphylum: nil, within_superclass: nil, within_class: nil, within_subclass: nil,
+  #                   within_superorder: nil, within_order: nil, within_suborder: nil, within_superfamily: nil,
+  #                   within_family: nil, within_subfamily: nil, within_tribe: nil, within_subtribe: nil,
+  #                   within_genus: nil, within_subgenus: nil, within_section: nil, within_species: nil,
+  #                   verbose: false)
+  #   endpoint = "dataset/#{dataset_id}/matching"
+  #   Request.new(endpoint: endpoint, name: name, authorship: authorship, code: code, rank: rank,
+  #               within_superkingdom: within_superkingdom, within_kingdom: within_kingdom,
+  #               within_subkingdom: within_subkingdom, within_superphylum: within_superphylum,
+  #               within_phylum: within_phylum, within_subphylum: within_subphylum, within_superclass: within_superclass,
+  #               within_class: within_class, within_subclass: within_subclass, within_superorder: within_superorder,
+  #               within_order: within_order, within_suborder: within_suborder, within_superfamily: within_superfamily,
+  #               within_family: within_family, within_subfamily: within_subfamily, within_tribe: within_tribe,
+  #               within_subtribe: within_subtribe, within_genus: within_genus, within_subgenus: within_subgenus,
+  #               within_section: within_section, within_species: within_species, verbose: verbose).perform
+  # end
 
   # Get metrics for the *last successful* import of a dataset or a specific import_attempt
   #
@@ -359,6 +400,32 @@ module Colrapi
                 sort_by: sort_by, reverse: reverse, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Parse a scientific name
+  #
+  # @param name [String] The scientific name to parse
+  # @param authorship [String, nil] The authorship string for the scientific name
+  # @param rank [String, nil] The rank of the scientific name to parse
+  # @param code [String] The nomenclatural code (bacterial, botanical, cultivars, phytosociological, virus, zoological)
+  #
+  # @return [Hash, Boolean] A hash with the parsed scientific name
+  def self.parser_name(name, authorship: nil, rank: nil, code: nil, verbose: false)
+    endpoint = 'parser/name'
+    Request.new(endpoint: endpoint, name: name, authorship: authorship, rank: rank, code: code,
+                verbose: verbose).perform
+  end
+
+  # Get metadata patch
+  #
+  # @param dataset_id [String] The dataset id
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
+  def self.patch(dataset_id, patch_id: nil, token: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/patch"
+    unless patch_id.nil?
+      endpoint = "#{endpoint}/#{patch_id}"
+    end
+    Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
+  end
+
   # Get a reference with @reference_id from dataset @dataset_id via the reference route
   #
   # @param dataset_id [String] The dataset id
@@ -382,6 +449,90 @@ module Colrapi
       endpoint = "#{endpoint}/#{reference_id}"
     end
     Request.new(endpoint: endpoint, issue: issue, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
+  # Get reviewer info
+  #
+  # @param dataset_id [String] The dataset id
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
+  #
+  # # @return [Array, Hash, Boolean] An array of hashes
+  def self.reviewer(dataset_id, token, verbose: false)
+    endpoint = "dataset/#{dataset_id}/reviewer"
+    Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
+  end
+
+  # Get sector metadata, which allows importing datasets into project subtrees
+  #
+  # @param dataset_id [String] The dataset id
+  # @param sector_id [Integer, nil] The sector id
+  # @param name [String] The scientific name to query
+  # @param rank [String, nil] The rank of the scientific name
+  # @param modified_by [Integer, nil] Filter by a user id  on last modified by
+  # @param broken [Boolean, nil] Whether the decision is broken or not
+  # @param subject_dataset_id [String, nil] The source dataset id
+  # @param last_synced_before [Date, nil] Filter by sectors synced before this date
+  # @param mode [String, nil] Filter by type of sector (attach, union, merge)
+  # @param subject [Boolean, nil] TODO: what does this do? All decisions with subject=true are bare names, so maybe it checks if the subject taxon exists?
+  # @param min_size [Integer, nil] The minimum number of records in the sector
+  # @param without_data [Boolean, nil] Filters to empty sectors with no data synced into the project yet
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] An hash of results
+  def self.sector(dataset_id, sector_id: nil, name: nil, rank: nil, modified_by: nil, broken: nil,
+                  subject_dataset_id: nil, last_synced_before: nil, mode: nil, subject: nil, min_size: nil, without_data: nil,
+                  offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/sector"
+    if sector_id.nil?
+      Request.new(endpoint: endpoint, name: name, rank: rank, modified_by: modified_by, broken: broken,
+                  subject_dataset_id: subject_dataset_id, last_synced_before: last_synced_before, mode: mode,
+                  subject: subject, min_size: min_size, without_data: without_data,
+                  offset: offset, limit: limit, verbose: verbose).perform
+    else
+      endpoint = "#{endpoint}/#{sector_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
+
+  # Get sector sync info
+  #
+  # @param dataset_id [String] The dataset id
+  # @param sector_id [Integer, nil] The sector id
+  # @param state [Array, String, nil] The sector sync state (e.g., waiting, processing, inserting, indexing, finished, etc.)
+  # @param running [Boolean, nil] Filter to sector syncs that are only running
+  # @param attempt [Integer, nil] The sync attempt number for sector_id
+  # @param subresource [String, nil] The subresource for attempt (names or tree)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] An hash of results
+  def self.sector_sync(dataset_id, sector_id: nil, attempt: nil, subresource: nil, state: nil, running: nil, offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/sector/sync"
+    if sector_id.nil?
+      Request.new(endpoint: endpoint, state: state, running: running, offset: offset, limit: limit,
+                  verbose:verbose).perform
+    else
+      if attempt.nil?
+        endpoint = "dataset/#{dataset_id}/sector/#{sector_id}/sync"
+      else
+        endpoint = "dataset/#{dataset_id}/sector/#{sector_id}/sync/#{attempt}"
+        endpoint = "#{endpoint}/#{subresource}" unless subresource.nil?
+      end
+      Request.new(endpoint: endpoint, verbose:verbose).perform
+    end
+  end
+
+  # Get the dataset settings
+  # @param dataset_id [String] The dataset id
+  #
+  # @return [Hash, Boolean] A hash including the dataset settings
+  def self.settings(dataset_id)
+    Request.new(endpoint: "dataset/#{dataset_id}/settings").perform
   end
 
   # Get a synonym with @synonym_id from dataset @dataset_id via the synonym route
@@ -456,6 +607,44 @@ module Colrapi
     endpoint = "#{endpoint}/#{taxon_id}" unless taxon_id.nil?
     endpoint = "#{endpoint}/children" unless taxon_id.nil? or !children
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
+  # Get user data
+  #
+  # @param user_id [Integer, nil] The user id
+  # @param q [String, nil] The search query
+  # @param role [String, nil] The user role (admin, editor, or reviewer)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.user(user_id: nil, q: nil, role: nil, offset: nil, limit: nil, token: nil, verbose: false)
+    if user_id.nil?
+      endpoint = "user"
+      Request.new(endpoint: endpoint, q: q, role: role, offset: offset, limit: limit, token: token,
+                  verbose: verbose).perform
+    else
+      endpoint = "user/#{user_id}"
+      Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
+    end
+  end
+
+  # Authenticate user and get authentication token
+  def self.user_login(user, password, verbose: false)
+    Request.new(endpoint: "user/login", user: user, password: password, verbose: verbose).perform
+  end
+
+  # Get the authenticated user
+  #
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.user_me(token, verbose: false)
+    Request.new(endpoint: "user/me", token: token, verbose: verbose).perform
   end
 
   # Get verbatim data
