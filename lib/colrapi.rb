@@ -118,6 +118,34 @@ module Colrapi
     Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # Get names diff between 2 datasets
+  #
+  # @param dataset_id [String] The first dataset id
+  # @param dataset2_id [String] The second dataset id
+  # @param root_id [Array, String, nil] The root taxon for the first dataset
+  # @param root2_id [Array, String, nil] The root taxon for the second dataset
+  # @param min_rank [String, nil] The minimum taxonomic rank
+  # @param authorship [Boolean, nil] Include authorship
+  # @param include_synonyms [Boolean, nil] Include synonyms
+  # @param include_parent [Boolean, nil] Include parent
+  # @param parent_rank [String, nil] Filter by parent rank
+  # @param token [String, nil] An authentication token from Colrapi.user_login()
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [String] A text diff of names
+  def self.diff(dataset_id, dataset2_id, root_id: nil, root2_id: nil, min_rank: nil,
+                authorship: nil, include_synonyms: nil, include_parent: nil, parent_rank: nil,
+                offset: nil, limit: nil, token: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/diff/#{dataset2_id}"
+    Request.new(endpoint: endpoint, root_id: root_id, root2_id: root2_id, min_rank: min_rank,
+                authorship: authorship, include_synonyms: include_synonyms,
+                include_parent: include_parent, parent_rank: parent_rank,
+                offset: offset, limit: limit, token: token, verbose: verbose).perform
+  end
+
   # Get editor info
   #
   # @param dataset_id [String] The dataset id
