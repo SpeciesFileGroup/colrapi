@@ -29,6 +29,15 @@ class TestNameusageSearch < Test::Unit::TestCase
     end
   end
 
+  def test_nameusage_search_name_ranks
+    VCR.use_cassette("test_nameusage_search_ranks") do
+      res = Colrapi.nameusage_search(rank: ['genus', 'family'], limit: 50)
+      res['result'].each do |nu|
+        assert_true(%w[genus family].include? nu['usage']['name']['rank'])
+      end
+    end
+  end
+
   def test_nameusage_search_min_max_ranks
     VCR.use_cassette("test_nameusage_search_min_max_ranks") do
       res = Colrapi.nameusage_search(q: 'Alces alces', dataset_id: '9837',
