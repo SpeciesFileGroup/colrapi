@@ -19,9 +19,14 @@ module Colrapi
       @authorship = args[:authorship]
       @code = args[:code]
       @type = args[:type]
-      @rank = args[:rank]
+      @rank = Array(args[:rank]) if args[:rank]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @parent_rank = args[:parent_rank]
+      @root_id = args[:root_id]
+      @root2_id = args[:root2_id]
+      @include_parent = args[:include_parent]
+      @include_synonyms = args[:include_synonyms]
       @dataset_id_filter = args[:dataset_id_filter]
       @short_title = args[:short_title]
       @private = args[:private]
@@ -47,6 +52,8 @@ module Colrapi
       @modified_after =  args[:modified_after]
       @modified_before = args[:modified_before]
       @last_synced_before = args[:last_synced_before]
+      @min = args[:min]
+      @max = args[:max]
       @min_size = args[:min_size]
       @within_superkingdom = args[:within_superkingdom]
       @within_kingdom = args[:within_kingdom]
@@ -88,15 +95,18 @@ module Colrapi
     end
 
     def perform
+
       args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank, term: @term, term_operator: @term_operator,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank,
+               term: @term, term_operator: @term_operator,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
+               root: @root_id, root2: @root2_id, synonyms: @include_synonyms, showParent: @include_parent,
                origin: @origin, license: @license, rowType: @row_type, created: @created_after,
                createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
                modifiedBefore: @modified_before, lastSync: @last_synced_before, minSize: @min_size, issue: @issue,
-               datasetKey: @dataset_id_filter, withoutData: @without_data,
+               min: @min, max: @max, datasetKey: @dataset_id_filter, withoutData: @without_data,
                superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
