@@ -157,6 +157,33 @@ module Colrapi
     Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
   end
 
+  # Get estimates
+  # @param dataset_id [String] The dataset id
+  # @param estimate_id [Integer, nil] The estimate ID
+  # @param name [String] The scientific name
+  # @param rank [String, nil] taxonomic rank
+  # @param modified_by [Integer, nil] Filter by a user id  on last modified by
+  # @param broken [Boolean, nil] Whether the estimate is broken or not
+  # @param min [Integer, nil] Filter by the minimum estimate
+  # @param max [Integer, nil] Filter by the maximum estimate
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] A results hash
+  def self.estimate(dataset_id, estimate_id: nil, name: nil, rank: nil, modified_by: nil, broken: nil, min: nil,
+                    max: nil, offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/estimate"
+    if estimate_id.nil?
+      Request.new(endpoint: endpoint, name: name, rank: rank, modified_by: modified_by, broken: broken,
+                  min: min, max: max, offset: offset, limit: limit, verbose: verbose).perform
+    else
+      endpoint = "dataset/#{dataset_id}/estimate/#{estimate_id}"
+      Request.new(endpoint: endpoint, verbose: verbose).perform
+    end
+  end
+
   # Get data quality issues
   #
   # @param dataset_id [String] The dataset id
