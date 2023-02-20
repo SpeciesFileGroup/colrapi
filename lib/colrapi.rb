@@ -396,7 +396,7 @@ module Colrapi
   # @param dataset_id [String] The dataset id
   # @param nameusage_id [String] The nameusage id
   # @param q [String] The scientific name or authorship search query
-  # @param rank [String] The rank of the taxon in the search query q
+  # @param rank [Array, String] The rank of the taxon in the search query q
   # @param nidx_id [String] The name index id
   # @param subresource [String] The name subresource endpoint (relations, synonyms, types, or orphans)
   #
@@ -687,6 +687,22 @@ module Colrapi
     end
   end
 
+  # Get datasets user can access
+  # @param token [String] The access token from Colrapi.user_login()
+  # @param dataset_id [String, nil] A dataset id to check
+  # @param origin [Array, String, nil] Filter by the origin of a dataset (external, project, release, xrelease)
+  #
+  # @return [Array, Boolean] An array of datasets, or returns a boolean if dataset_id is provided
+  def self.user_dataset(token, dataset_id: nil, origin: nil, verbose: false)
+    endpoint = "user/dataset"
+    if dataset_id.nil?
+      Request.new(endpoint: endpoint, token: token, origin: origin, verbose: verbose).perform
+    else
+      endpoint = "user/dataset/#{dataset_id}"
+      Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
+    end
+  end
+
   # Authenticate user and get authentication token
   def self.user_login(user, password, verbose: false)
     Request.new(endpoint: "user/login", user: user, password: password, verbose: verbose).perform
@@ -729,6 +745,33 @@ module Colrapi
       endpoint = "#{endpoint}/#{verbatim_id}"
       Request.new(endpoint: endpoint, verbose: verbose).perform
     end
+  end
+
+  # Get vernacular names
+  #
+  # @param dataset_id [String, nil] The dataset id
+  # @param language [String, nil] The language of the vernacular name (see: http://api.checklistbank.org/vocab/language)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash] A hash of vernacular results
+  def self.vernacular(dataset_id: nil, language: nil, offset: nil, limit: nil, verbose: false)
+    if dataset_id.nil?
+      endpoint = 'vernacular'
+      Request.new(endpoint: endpoint, language: language, offset: offset, limit: limit, verbose: verbose).perform
+    else
+      endpoint = "dataset/#{dataset_id}/vernacular"
+      Request.new(endpoint: endpoint, language: language, offset: offset, limit: limit, verbose: verbose).perform
+    end
+  end
+
+  # Get backend version
+  #
+  # @return [String] A version string
+  def self.version(verbose: false)
+    Request.new(endpoint: 'version', verbose: verbose).perform
   end
 
   # Get vocab
