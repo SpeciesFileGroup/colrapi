@@ -111,7 +111,7 @@ module Colrapi
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
-               Faraday.new(url: Colrapi.base_url, request: options || []) do |f|
+               Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
                  if !@user.nil? and !@password.nil?
                    f.request(:basic_auth, @user, @password)
                  end
@@ -120,7 +120,7 @@ module Colrapi
                  f.adapter Faraday.default_adapter
                end
              else
-               Faraday.new(url: Colrapi.base_url, request: options || []) do |f|
+               Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
                  if !@user.nil? and !@password.nil?
                    f.request(:basic_auth, @user, @password)
                  end
