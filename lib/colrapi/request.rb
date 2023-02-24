@@ -14,12 +14,14 @@ module Colrapi
       @endpoint = args[:endpoint]
       @verbose = args[:verbose]
       @q = args[:q]
-      @content = args[:content]
+      @regexp = args[:regexp]
+      @content = Array(args[:content]) if args[:content]
       @name = args[:name]
       @authorship = args[:authorship]
       @code = args[:code]
       @type = args[:type]
       @rank = Array(args[:rank]) if args[:rank]
+      @facet = Array(args[:facet]) if args[:facet]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
       @parent_rank = args[:parent_rank]
@@ -28,6 +30,7 @@ module Colrapi
       @include_parent = args[:include_parent]
       @include_synonyms = args[:include_synonyms]
       @dataset_id_filter = args[:dataset_id_filter]
+      @project_id = args[:project_id]
       @short_title = args[:short_title]
       @private = args[:private]
       @released_from = args[:released_from]
@@ -40,11 +43,13 @@ module Colrapi
       @reviewer = args[:reviewer]
       @modified_by = args[:modified_by]
       @origin = args[:origin]
+      @original = args[:original]
+      @not_current_only = args[:not_current_only]
       @license = args[:license]
       @row_type = args[:row_type]
       @created_after = args[:created_after]
       @created_before = args[:created_before]
-      @issue = args[:issue]
+      @issue = Array(args[:issue]) if args[:issue]
       @term = args[:term]
       @term_operator = args[:term_operator]
       @issued = args[:issued]
@@ -55,6 +60,7 @@ module Colrapi
       @min = args[:min]
       @max = args[:max]
       @min_size = args[:min_size]
+      @size = args[:size]
       @within_superkingdom = args[:within_superkingdom]
       @within_kingdom = args[:within_kingdom]
       @within_subkingdom = args[:within_subkingdom]
@@ -80,12 +86,14 @@ module Colrapi
       @broken = args[:broken]
       @subject_dataset_id = args[:subject_dataset_id]
       @mode = args[:mode]
+      @decision_mode = args[:decision_mode]
       @subject = args[:subject]
       @nidx_id = args[:nidx_id]
       @sort_by = args[:sort_by]
       @reverse = args[:reverse]
       @limit = args[:limit]
       @offset = args[:offset]
+      @status = args[:status]
       @state = args[:state]
       @running = args[:running]
       @user = args[:user]
@@ -96,17 +104,17 @@ module Colrapi
 
     def perform
 
-      args = { q: @q, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
-               rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank,
-               term: @term, term_operator: @term_operator,
+      args = { q: @q, regex: @regexp, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
+               rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank, projectKey: @project_id,
+               term: @term, term_operator: @term_operator, status: @status, decisionMode: @decision_mode,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
                root: @root_id, root2: @root2_id, synonyms: @include_synonyms, showParent: @include_parent,
-               origin: @origin, license: @license, rowType: @row_type, created: @created_after,
+               origin: @origin, original: @original, license: @license, rowType: @row_type, created: @created_after,
                createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
-               modifiedBefore: @modified_before, lastSync: @last_synced_before, minSize: @min_size, issue: @issue,
-               min: @min, max: @max, datasetKey: @dataset_id_filter, withoutData: @without_data,
+               modifiedBefore: @modified_before, lastSync: @last_synced_before, minSize: @min_size, size: @size,
+               issue: @issue, min: @min, max: @max, datasetKey: @dataset_id_filter, withoutData: @without_data,
                superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
                superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
@@ -115,7 +123,7 @@ module Colrapi
                family: @within_family, subfamily: @within_subfamily,
                tribe: @within_tribe, subtribe: @within_subtribe, genus: @within_genus,
                subgenus: @within_subgenus, section: @within_section, species: @within_species,
-               nidx: @nidx_id, state: @state, running: @running,
+               nidx: @nidx_id, state: @state, running: @running, notCurrentOnly: @not_current_only,
                broken: @broken, subjectDatasetKey: @subject_dataset_id, mode: @mode, subject: @subject,
                sortBy: @sort_by, reverse: @reverse, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
