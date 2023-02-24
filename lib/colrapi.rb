@@ -11,6 +11,26 @@ module Colrapi
   define_setting :base_url, "https://api.checklistbank.org/"
   define_setting :mailto, ENV["COL_API_EMAIL"]
 
+  # Get assembly status
+  #
+  # @param dataset_id [String] The dataset id
+  #
+  # @return [Hash] A result hash of the assembly queue
+  def self.assembly(dataset_id, verbose: false)
+    endpoint = "dataset/#{dataset_id}/assembly"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
+  # Get a dataset's original archive
+  #
+  # @param dataset_id [String] The dataset id
+  #
+  # @return [Binary] An archive of the original dataset
+  def self.archive(dataset_id, verbose: false)
+    endpoint = "dataset/#{dataset_id}/archive"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
   # Get dataset metadata
   #
   # For a specific dataset:
@@ -184,6 +204,18 @@ module Colrapi
     end
   end
 
+  # Get export
+  #
+  # @param dataset_id [String] The dataset id
+  # @param show_id [Boolean, nil] TODO: not implemented because it doesn't seem to do anything?
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] An export hash
+  def self.export(dataset_id, show_id: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/export"
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
   # Get data quality issues
   #
   # @param dataset_id [String] The dataset id
@@ -245,6 +277,17 @@ module Colrapi
       endpoint = "#{endpoint}/#{dataset_id}"
       Request.new(endpoint: endpoint, verbose: verbose).perform
     end
+  end
+
+  # Get a dataset's logo
+  #
+  # @param dataset_id [String] The dataset id
+  # @param size [String] The size of the logo (original, large, medium, small)
+  #
+  # @return [Binary] The dataset logo
+  def self.logo(dataset_id, size: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/logo"
+    Request.new(endpoint: endpoint, size: size, verbose: verbose).perform
   end
 
   # Get names or a name from a dataset
@@ -420,12 +463,31 @@ module Colrapi
                 verbose: verbose).perform
   end
 
+  # Search for a name usage with a regex pattern
+  #
+  # @param dataset_id [String, nil] restricts name usage pattern search within a dataset
+  # @param regexp [String] The regular expression pattern
+  # @param status [String, nil] The taxonomic status (accepted, provisionally_accepted, synonym, ambiguous_synonym, misapplied, bare_name)
+  # @param rank [String, nil] The taxonomic rank
+  # @param project_id [String, nil] Filter to names from project_id, required if decision_mode used
+  # @param decision_mode [String, nil] The type of decision (block, reviewed, update, update_recursive, ignore)
+  #
+  # @param offset [Integer] Offset for pagination
+  # @param limit [Integer] Limit for pagination
+  # @param verbose [Boolean] Print headers to STDOUT
+  def self.nameusage_pattern(dataset_id, regexp, status: nil, rank: nil, project_id: nil, decision_mode: nil,
+                             offset: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/nameusage/pattern"
+    Request.new(endpoint: endpoint, regexp: regexp, project_id: project_id, status: status, rank: rank,
+                decision_mode: decision_mode, offset: offset, limit: limit, verbose: verbose).perform
+  end
+
   # Search the nameusage route, which uses Elastic Search
   #
   # @param q [String] A query string
   # @param dataset_id [String, nil] restricts name usage search within a dataset
   # @param endpoint [String, nil] some endpoints have nested options
-  # @param content [String, nil] restrict search to SCIENTIFIC_NAME, or AUTHORSHIP
+  # @param content [Array, String, nil] restrict search to SCIENTIFIC_NAME, or AUTHORSHIP
   # @param issue [Array, String, nil] the data quality issue
   # @param type [String, nil] sets the type of search to PREFIX, WHOLE_WORDS, or EXACT
   # @param rank [String, nil] taxonomic rank of name usages
@@ -581,6 +643,25 @@ module Colrapi
       Request.new(endpoint: endpoint, verbose:verbose).perform
     end
   end
+
+  # Get source metadata for datasets assembled into a project dataset
+  #
+  # @param dataset_id [String] The project dataset id
+  # @param source_id [String] The source dataset id
+  # @param not_current_only [String] Return only not current sources
+  # @param original [String] TODO: what does this do?
+  #
+  # @return [Array, Hash, Boolean] An array of source hashes, or a hash of a source
+  def self.source(dataset_id, source_id: nil, not_current_only: nil, original: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/source"
+    if source_id.nil?
+      Request.new(endpoint: endpoint, not_current_only: not_current_only, verbose: verbose).perform
+    else
+      endpoint = "dataset/#{dataset_id}/source/#{source_id}"
+      Request.new(endpoint: endpoint, original: original, verbose: verbose).perform
+    end
+  end
+
 
   # Get the dataset settings
   # @param dataset_id [String] The dataset id
