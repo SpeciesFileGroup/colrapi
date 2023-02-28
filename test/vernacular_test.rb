@@ -60,4 +60,14 @@ class TestVernacular < Test::Unit::TestCase
       assert_equal(6, res['limit'])
     end
   end
+
+  def test_vernacular_q
+    VCR.use_cassette("test_vernacular_q") do
+      res = Colrapi.vernacular(q: 'oak', offset: 8, limit: 6)
+      res['result'].each do |r|
+        assert_include(r['name'].downcase, 'oak')
+      end
+    end
+  end
 end
+
