@@ -13,20 +13,22 @@ module Colrapi
     def initialize(**args)
       @endpoint = args[:endpoint]
       @verbose = args[:verbose]
-      @q = args[:q]
+      @q = Array(args[:q]) if args[:q]
+      @id = args[:id]
+      @format = args[:format]
       @regexp = args[:regexp]
       @content = Array(args[:content]) if args[:content]
       @name = args[:name]
       @authorship = args[:authorship]
       @code = args[:code]
-      @type = args[:type]
+      @type = Array(args[:type]) if args[:type]
       @rank = Array(args[:rank]) if args[:rank]
       @facet = Array(args[:facet]) if args[:facet]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
       @parent_rank = args[:parent_rank]
-      @root_id = args[:root_id]
-      @root2_id = args[:root2_id]
+      @root_id = Array(args[:root_id]) if args[:root_id]
+      @root2_id = Array(args[:root2_id]) if args[:root2_id]
       @include_parent = args[:include_parent]
       @include_synonyms = args[:include_synonyms]
       @dataset_id_filter = args[:dataset_id_filter]
@@ -42,15 +44,15 @@ module Colrapi
       @editor = args[:editor]
       @reviewer = args[:reviewer]
       @modified_by = args[:modified_by]
-      @origin = args[:origin]
+      @origin = Array(args[:origin]) if args[:origin]
       @original = args[:original]
       @not_current_only = args[:not_current_only]
-      @license = args[:license]
-      @row_type = args[:row_type]
+      @license = Array(args[:license]) if args[:license]
+      @row_type = Array(args[:row_type]) if args[:row_type]
       @created_after = args[:created_after]
       @created_before = args[:created_before]
       @issue = Array(args[:issue]) if args[:issue]
-      @term = args[:term]
+      @term = Array(args[:term]) if args[:term]
       @term_operator = args[:term_operator]
       @issued = args[:issued]
       @issued_before = args[:issued]
@@ -94,7 +96,7 @@ module Colrapi
       @limit = args[:limit]
       @offset = args[:offset]
       @status = args[:status]
-      @state = args[:state]
+      @state = Array(args[:state]) if args[:state]
       @running = args[:running]
       @user = args[:user]
       @password = args[:password]
@@ -110,13 +112,13 @@ module Colrapi
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
-               root: @root_id, root2: @root2_id, synonyms: @include_synonyms, showParent: @include_parent,
-               origin: @origin, original: @original, license: @license, rowType: @row_type, created: @created_after,
-               createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before, modified: @modified_after,
-               modifiedBefore: @modified_before, lastSync: @last_synced_before, minSize: @min_size, size: @size,
-               issue: @issue, min: @min, max: @max, datasetKey: @dataset_id_filter, withoutData: @without_data,
-               superkingdom: @within_superkingdom, kingdom: @within_kingdom, subkingdom: @within_subkingdom,
-               superphylum: @within_superphylum, phylum: @within_phylum,
+               id: @id, format: @format, root: @root_id, root2: @root2_id, synonyms: @include_synonyms,
+               showParent: @include_parent, origin: @origin, original: @original, license: @license, rowType: @row_type,
+               created: @created_after, createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before,
+               modified: @modified_after, modifiedBefore: @modified_before, lastSync: @last_synced_before,
+               minSize: @min_size, size: @size, issue: @issue, min: @min, max: @max, datasetKey: @dataset_id_filter,
+               withoutData: @without_data, superkingdom: @within_superkingdom, kingdom: @within_kingdom,
+               subkingdom: @within_subkingdom, superphylum: @within_superphylum, phylum: @within_phylum,
                subphylum: @within_subphylum, superclass: @within_superclass, class: @within_class,
                subclass: @within_subclass, superorder: @within_superorder, order: @within_order,
                suborder: @within_suborder, superfamily: @within_superfamily,
