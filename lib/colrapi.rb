@@ -155,7 +155,7 @@ module Colrapi
   # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
-  # @return [String] A text diff of names
+  # @return [String, Boolean] A text diff of names
   def self.diff(dataset_id, dataset2_id, root_id: nil, root2_id: nil, min_rank: nil,
                 authorship: nil, include_synonyms: nil, include_parent: nil, parent_rank: nil,
                 offset: nil, limit: nil, token: nil, verbose: false)
@@ -204,7 +204,8 @@ module Colrapi
     end
   end
 
-  # Get export
+  # TODO: /dataset/{key}/export is covered, but /export and /export/{id} are not
+  # Get a dataset export
   #
   # @param dataset_id [String] The dataset id
   # @param show_id [Boolean, nil] TODO: not implemented because it doesn't seem to do anything?
@@ -259,7 +260,7 @@ module Colrapi
   #
   # @param dataset_id [String] Calls the dataset_id endpoint /importer/{dataset_id}
   # @param dataset_id_filter [String] Filters the importer queue by dataset_id
-  # @param state [String] The import status (e.g., waiting, preparing, downloading, processing, inserting, ...)
+  # @param state [Array, String] The import status (e.g., waiting, preparing, downloading, processing, inserting, ...)
   # @param running [Boolean] Filter by actively importing datasets
   #
   # @param offset [Integer] Offset for pagination
@@ -463,6 +464,10 @@ module Colrapi
                 verbose: verbose).perform
   end
 
+  # TODO: /dataset/{key}/nameusage/{id}/related not covered
+  # TODO: /dataset/{key}/nameusage/{id}/source not covered
+  # TODO: bring back /dataset/{key}/nameusage/match?
+
   # Search for a name usage with a regex pattern
   #
   # @param dataset_id [String, nil] restricts name usage pattern search within a dataset
@@ -517,6 +522,38 @@ module Colrapi
                 sort_by: sort_by, reverse: reverse, offset: offset, limit: limit, verbose: verbose).perform
   end
 
+  # TODO: /dataset/{key}/nameusage/suggest not covered
+
+  # TODO: /nidx/match, /nidx/{key} and /nidx/{key}/group not covered, but perhaps not really needed?
+
+  # Parse a {subresource}
+  #
+  #   This is the generic parser wrapper. For specialized parsers, like the names, homoglyphs, idconverter, metadata,
+  #     use the specialized parsers below like Colrapi.parser_name(). Returns a list of parsers if no subresource given.
+  #
+  # @param subresource [String] the type of parser to use
+  # @param q [Array, String] a query string or array of query strings to parse
+  #
+  # @return [Array, Hash, Boolean] An array of parsers, or a parser result hash
+  def self.parser(subresource: nil, q: nil, verbose: false)
+    endpoint = "parser"
+    endpoint = "#{endpoint}/#{subresource}" unless subresource.nil?
+    Request.new(endpoint: endpoint, q: q, verbose: verbose).perform
+  end
+
+  # Encode or decode identifiers to different formats (e.g., proquints are used as stable identifiers in ChecklistBank)
+  # @param mode [String] encode or decode
+  # @param id [String] the identifier to convert
+  # @param format [String] the format (proquint, hex, latin29, latin32, latin36, base64)
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [String, Integer, Boolean] A parser result hash
+  def self.parser_idconverter(mode, id, format, verbose: false)
+    endpoint = "parser/idconverter/#{mode}"
+    Request.new(endpoint: endpoint, id: id, format: format, verbose: verbose).perform
+  end
+
   # Parse a scientific name
   #
   # @param name [String] The scientific name to parse
@@ -543,12 +580,23 @@ module Colrapi
     Request.new(endpoint: endpoint, token: token, verbose: verbose).perform
   end
 
+  # Get the latest preview release metadata (or points to the project draft dataset after the preview is released?)
+  #   (Note: you can also use 3LRC where 3 is the project_id as an ID on any endpoint with dataset_id or project_id
+  #    to get data from the latest release candidate, or 3LR gets the latest release)
+  # @param project_id [String] The project id
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  # @return [Array, Boolean] An array of hashes
+  def self.preview(project_id, verbose: false)
+    Request.new(endpoint: "dataset/#{project_id}/preview", verbose: verbose).perform
+  end
+
   # Get a reference with @reference_id from dataset @dataset_id via the reference route
   #
   # @param dataset_id [String] The dataset id
   # @param reference_id [String] The reference id
   # @param subresource [String] The reference subresource endpoint (orphans)
-  # @param issue [String] The data quality issue (https://api.checklistbank.org/vocab/issue)
+  # @param issue [Array, String] The data quality issue (https://api.checklistbank.org/vocab/issue)
   #
   # @param offset [Integer] Offset for pagination
   # @param limit [Integer] Limit for pagination
@@ -708,23 +756,23 @@ module Colrapi
   # @param taxon_id [String] The taxon id
   # @param subresource [String] The taxon subresource endpoint (classification, distribution, info, interaction, media,
   #   relation, source, synonyms, treatment, or vernacular)
+  # @param format [String] The format of the treatment (plain_text, markdown, xml, html, tax_pub, taxon_x, rdf)
   #
   # @param offset [Integer] Offset for pagination
   # @param limit [Integer] Limit for pagination
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.taxon(dataset_id, taxon_id: nil, subresource: nil, offset: nil, limit: nil, verbose: false)
+  def self.taxon(dataset_id, taxon_id: nil, subresource: nil, format: nil, offset: nil, limit: nil, verbose: false)
     endpoint = "dataset/#{dataset_id}/taxon"
     unless taxon_id.nil?
       endpoint = "#{endpoint}/#{taxon_id}"
     end
 
-    subresources = %w[classification distribution info interaction media relation source synonyms treatment vernacular]
-    if !subresource.nil? and subresources.include? subresource
+    if !subresource.nil?
       endpoint = "#{endpoint}/#{subresource}"
     end
-    Request.new(endpoint: endpoint, offset: offset, limit: limit, verbose: verbose).perform
+    Request.new(endpoint: endpoint, offset: offset, format: format, limit: limit, verbose: verbose).perform
   end
 
   # Get the root taxa
@@ -831,6 +879,7 @@ module Colrapi
   # Get vernacular names
   #
   # @param dataset_id [String, nil] The dataset id
+  # @param q [String] A vernacular name search query
   # @param language [String, nil] The language of the vernacular name (see: http://api.checklistbank.org/vocab/language)
   #
   # @param offset [Integer] Offset for pagination
@@ -838,13 +887,13 @@ module Colrapi
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Hash] A hash of vernacular results
-  def self.vernacular(dataset_id: nil, language: nil, offset: nil, limit: nil, verbose: false)
+  def self.vernacular(dataset_id: nil, q: nil, language: nil, offset: nil, limit: nil, verbose: false)
     if dataset_id.nil?
       endpoint = 'vernacular'
-      Request.new(endpoint: endpoint, language: language, offset: offset, limit: limit, verbose: verbose).perform
+      Request.new(endpoint: endpoint, q: q, language: language, offset: offset, limit: limit, verbose: verbose).perform
     else
       endpoint = "dataset/#{dataset_id}/vernacular"
-      Request.new(endpoint: endpoint, language: language, offset: offset, limit: limit, verbose: verbose).perform
+      Request.new(endpoint: endpoint, q: q, language: language, offset: offset, limit: limit, verbose: verbose).perform
     end
   end
 
