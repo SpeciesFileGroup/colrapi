@@ -210,24 +210,24 @@ class TestName < Test::Unit::TestCase
   end
 
   # orphans are not synced into CoL so test might be broken with dataset 1141 updates
-  def test_name_orphans_rank
-    VCR.use_cassette("test_name_orphans") do
-      res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
-      assert_true(!!res['result'][0]['rank'].match(/^[a-z]+$/))
-    end
-  end
-
-  def test_name_orphans_genus
-    VCR.use_cassette("test_name_orphans") do
-      res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
-      assert_true(!!res['result'][0]['genus'].match(/^[A-Z][a-z]+$/))
-    end
-  end
-
-  def test_name_orphans_specific_epithet
-    VCR.use_cassette("test_name_orphans") do
-      res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
-      assert_true(!!res['result'][0]['specificEpithet'].match(/^[a-z]+$/))
-    end
-  end
+  # def test_name_orphans_rank
+  #   VCR.use_cassette("test_name_orphans") do
+  #     res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
+  #     assert_true(!!res['result'][0]['rank'].match(/^[a-z]+$/))
+  #   end
+  # end
+  #
+  # def test_name_orphans_genus
+  #   VCR.use_cassette("test_name_orphans") do
+  #     res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
+  #     assert_true(!!res['result'][0]['genus'].match(/^[A-Z][a-z]+$/))
+  #   end
+  # end
+  #
+  # def test_name_orphans_specific_epithet
+  #   VCR.use_cassette("test_name_orphans") do
+  #     res = Colrapi.name('1141', subresource: 'orphans', offset: 0, limit: 1)
+  #     assert_true(!!res['result'][0]['specificEpithet'].match(/^[a-z]+$/))
+  #   end
+  # end
 end
