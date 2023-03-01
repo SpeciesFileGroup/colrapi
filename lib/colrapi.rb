@@ -624,6 +624,18 @@ module Colrapi
     Request.new(endpoint: endpoint, id: id, format: format, verbose: verbose).perform
   end
 
+  # Parse metadata
+  # @param url [String] The url to a metadata file
+  # @param format [String] The format of the metadata (yaml, json, eml, datacite, zenodo)
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [String, Integer, Boolean] A parser result hash
+  def self.parser_metadata(url, format: nil, verbose: false)
+    endpoint = 'parser/metadata'
+    Request.new(endpoint: endpoint, url: url, format: format, verbose: verbose).perform
+  end
+
   # Parse a scientific name
   #
   # @param name [String] The scientific name to parse
