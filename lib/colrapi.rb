@@ -572,7 +572,27 @@ module Colrapi
                 sort_by: sort_by, reverse: reverse, offset: offset, limit: limit, verbose: verbose).perform
   end
 
-  # TODO: /dataset/{key}/nameusage/suggest not covered
+  # Get a name usage suggestion
+  #
+  # @param dataset_id [String] restricts name usage search within a dataset
+  # @param q [String] A suggestion search query
+  # @param fuzzy [Boolean, nil] Whether to include fuzzy matches for misspellings (TODO: might not actually work?)
+  # @param min_rank [String, nil] The minimum rank to suggest
+  # @param max_rank [String, nil] The maximum rank to suggest
+  # @param sort_by [String, nil] The sorting order (name, taxonomic, index_name_id, native, relevance)
+  # @param reverse [Boolean, nil] Sort in opposite order
+  # @param accepted [Boolean, nil] Suggest only accepted names
+  #
+  # @limit [Integer, nil] Limit the suggestion number (offset not available)
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] A a hash of name usage suggestions
+  def self.nameusage_suggest(dataset_id, q, fuzzy: nil, min_rank: nil, max_rank: nil, sort_by: nil, reverse: nil,
+                             accepted: nil, limit: nil, verbose: false)
+    endpoint = "dataset/#{dataset_id}/nameusage/suggest"
+    Request.new(endpoint: endpoint, q: q, fuzzy: fuzzy, min_rank: min_rank, max_rank: max_rank, sort_by: sort_by,
+                reverse: reverse, accepted: accepted, limit: limit, verbose: verbose).perform
+  end
 
   # TODO: /nidx/match, /nidx/{key} and /nidx/{key}/group not covered, but perhaps not really needed?
 
