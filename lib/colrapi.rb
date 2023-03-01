@@ -466,7 +466,57 @@ module Colrapi
 
   # TODO: /dataset/{key}/nameusage/{id}/related not covered
   # TODO: /dataset/{key}/nameusage/{id}/source not covered
-  # TODO: bring back /dataset/{key}/nameusage/match?
+
+  # Get names or a name from a dataset
+  #
+  # @param dataset_id [String] The dataset id
+  # @param name [String] The scientific name to match
+  # @param authorship [String] The authorship string for the scientific name
+  # @param code [String] The nomenclatural code (bacterial, botanical, cultivars, phytosociological, virus, zoological)
+  # @param rank [String] The rank of the scientific name
+  # @param within_superkingdom [String] Restricts query to within a superkingdom
+  # @param within_kingdom [String] Restricts query to within a kingdom
+  # @param within_subkingdom [String] Restricts query to within a subkingdom
+  # @param within_superphylum [String] Restricts query to within a superphylum
+  # @param within_phylum [String] Restricts query to within a phylum
+  # @param within_subphylum [String] Restricts query to within a subphylum
+  # @param within_superclass [String] Restricts query to within a superclass
+  # @param within_class [String] Restricts query to within a class
+  # @param within_subclass [String] Restricts query to within a subclass
+  # @param within_superorder [String] Restricts query to within a superorder
+  # @param within_order [String] Restricts query to within a order
+  # @param within_suborder [String] Restricts query to within a suborder
+  # @param within_superfamily [String] Restricts query to within a superfamily
+  # @param within_family [String] Restricts query to within a family
+  # @param within_subfamily [String] Restricts query to within a subfamily
+  # @param within_tribe [String] Restricts query to within a tribe
+  # @param within_subtribe [String] Restricts query to within a subtribe
+  # @param within_genus [String] Restricts query to within a genus
+  # @param within_subgenus [String] Restricts query to within a subgenus
+  # @param within_section [String] Restricts query to within a section
+  # @param within_species [String] Restricts query to within a species
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Array, Boolean] An array of hashes
+  def self.matching(dataset_id, name: nil, authorship: nil, code: nil, rank: nil, within_superkingdom: nil,
+                    within_kingdom: nil, within_subkingdom: nil, within_superphylum: nil, within_phylum: nil,
+                    within_subphylum: nil, within_superclass: nil, within_class: nil, within_subclass: nil,
+                    within_superorder: nil, within_order: nil, within_suborder: nil, within_superfamily: nil,
+                    within_family: nil, within_subfamily: nil, within_tribe: nil, within_subtribe: nil,
+                    within_genus: nil, within_subgenus: nil, within_section: nil, within_species: nil,
+                    verbose: false)
+    endpoint = "dataset/#{dataset_id}/nameusage/match"
+    Request.new(endpoint: endpoint, name: name, authorship: authorship, code: code, rank: rank,
+                within_superkingdom: within_superkingdom, within_kingdom: within_kingdom,
+                within_subkingdom: within_subkingdom, within_superphylum: within_superphylum,
+                within_phylum: within_phylum, within_subphylum: within_subphylum, within_superclass: within_superclass,
+                within_class: within_class, within_subclass: within_subclass, within_superorder: within_superorder,
+                within_order: within_order, within_suborder: within_suborder, within_superfamily: within_superfamily,
+                within_family: within_family, within_subfamily: within_subfamily, within_tribe: within_tribe,
+                within_subtribe: within_subtribe, within_genus: within_genus, within_subgenus: within_subgenus,
+                within_section: within_section, within_species: within_species, verbose: verbose).perform
+  end
 
   # Search for a name usage with a regex pattern
   #
