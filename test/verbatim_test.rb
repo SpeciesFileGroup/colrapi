@@ -63,25 +63,26 @@ class TestVerbatim < Test::Unit::TestCase
     end
   end
 
-  # TODO: Won't work yet: https://github.com/CatalogueOfLife/backend/issues/1201
-  #   def test_verbatim_term
-  #     VCR.use_cassette("test_verbatim_term") do
-  #       res = Colrapi.verbatim(@dataset_id, term: 'dwc:order', limit: 100)
-  #       res['result'].each do |v|
-  #         assert_true(v['terms'].key? 'dwc:order')
-  #       end
-  #     end
-  #   end
-  #   def test_verbatim_term_op_and
-  #     VCR.use_cassette("test_verbatim_term_op_and") do
-  #       res = Colrapi.verbatim(@dataset_id, term: ['dwc:order', 'dcterms:format'], term_operator: 'and', limit: 100)
-  #       assert_equal(0, res['total'])
-  #     end
-  #   end
-  #   def test_verbatim_term_op_or
-  #     VCR.use_cassette("test_verbatim_term_op_or") do
-  #       res = Colrapi.verbatim(@dataset_id, term: ['dwc:order', 'dcterms:format'], term_operator: 'or', limit: 100)
-  #       assert_equal(30, res['total'])
-  #     end
-  #   end
+  def test_verbatim_term
+    VCR.use_cassette("test_verbatim_term") do
+      res = Colrapi.verbatim(@dataset_id, term: 'dwc:order', limit: 100)
+      res['result'].each do |v|
+        assert_true(v['terms'].key? 'dwc:order')
+      end
+    end
+  end
+
+  def test_verbatim_term_op_and
+    VCR.use_cassette("test_verbatim_term_op_and") do
+      res = Colrapi.verbatim(@dataset_id, term: ['dwc:order', 'dcterms:format'], term_operator: 'and', limit: 100)
+      assert_equal(0, res['total'])
+    end
+  end
+
+  def test_verbatim_term_op_or
+    VCR.use_cassette("test_verbatim_term_op_or") do
+      res = Colrapi.verbatim(@dataset_id, term: ['dwc:order', 'dcterms:format'], term_operator: 'or', limit: 100)
+      assert_equal(30, res['total'])
+    end
+  end
 end

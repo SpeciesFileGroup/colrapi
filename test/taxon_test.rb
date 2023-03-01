@@ -232,12 +232,14 @@ class TestTaxon < Test::Unit::TestCase
     end
   end
 
-  # TODO: find a dataset with media
   def test_taxon_media
-
+    VCR.use_cassette("test_taxon_media") do
+      res = Colrapi.taxon('1044', taxon_id: 'urn:lsid:marinespecies.org:taxname:166055', subresource: 'media')
+      assert_equal('image', res[0]['type'])
+    end
   end
 
-  # TODO: find a dataset with RCC5 relations
+  # TODO: no datasets exist with RCC5 relations yet: http://api.checklistbank.org/dataset?rowType=TaxonConceptRelation
   def test_taxon_relation
 
   end
