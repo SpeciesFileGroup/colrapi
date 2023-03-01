@@ -594,7 +594,29 @@ module Colrapi
                 reverse: reverse, accepted: accepted, limit: limit, verbose: verbose).perform
   end
 
-  # TODO: /nidx/match, /nidx/{key} and /nidx/{key}/group not covered, but perhaps not really needed?
+  # Get names index info
+  #
+  # @param nidx_id [Integer] a names index ID
+  # @param subresource [String, nil] the subresource (group)
+  def self.nidx(nidx_id, subresource: nil, verbose: false)
+    endpoint = "nidx/#{nidx_id}"
+    endpoint = "nidx/#{nidx_id}/#{subresource}" unless subresource.nil?
+    Request.new(endpoint: endpoint, verbose: verbose).perform
+  end
+
+  # Get names index matches
+  # @param q [String, nil] A match query
+  # @param authorship [String, nil] An authorship string
+  # @param rank [String, nil] The taxonomic rank
+  # @param code [String, nil] The nomenclatural code
+  #
+  # @param verbose [Boolean] Print headers to STDOUT
+  #
+  # @return [Hash, Boolean] A match hash
+  def self.nidx_match(q, authorship: nil, rank: nil, code: nil, verbose: false)
+    endpoint = "nidx/match"
+    Request.new(endpoint: endpoint, q: q, authorship: authorship, rank: rank, code: code, verbose: verbose).perform
+  end
 
   # Parse a {subresource}
   #
