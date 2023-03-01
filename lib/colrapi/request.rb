@@ -13,6 +13,7 @@ module Colrapi
     def initialize(**args)
       @endpoint = args[:endpoint]
       @verbose = args[:verbose]
+      @url = args[:url]
       @q = Array(args[:q]) if args[:q]
       @id = args[:id]
       @format = args[:format]
@@ -108,7 +109,7 @@ module Colrapi
 
       args = { q: @q, regex: @regexp, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
                rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank, projectKey: @project_id,
-               term: @term, term_operator: @term_operator, status: @status, decisionMode: @decision_mode,
+               term: @term, termOp: @term_operator, status: @status, decisionMode: @decision_mode,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
                hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
@@ -127,7 +128,7 @@ module Colrapi
                subgenus: @within_subgenus, section: @within_section, species: @within_species,
                nidx: @nidx_id, state: @state, running: @running, notCurrentOnly: @not_current_only,
                broken: @broken, subjectDatasetKey: @subject_dataset_id, mode: @mode, subject: @subject,
-               sortBy: @sort_by, reverse: @reverse, offset: @offset, limit: @limit}
+               sortBy: @sort_by, reverse: @reverse, url: @url, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 
       conn = if verbose
