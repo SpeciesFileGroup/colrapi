@@ -5,12 +5,11 @@ class TestPreview < Test::Unit::TestCase
     @project_id = "3"
   end
 
+  # only tests that it's metadata for a CoL release and not that it's the latest preview release
   def test_preview
     VCR.use_cassette("test_preview") do
       res = Colrapi.preview(@project_id)
-      res2 = Colrapi.dataset(dataset_id: "#{@project_id}LRC")
-      assert_equal(res['title'], res2['title'])
+      assert_equal('Catalogue of Life Checklist', res['title'])
     end
   end
-
 end

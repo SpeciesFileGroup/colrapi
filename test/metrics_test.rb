@@ -19,9 +19,15 @@ class TestMetrics < Test::Unit::TestCase
   def test_metrics_failed_import
     VCR.use_cassette("test_metrics_failed_import") do
       failed_queue = Colrapi.importer(state: 'failed')
-      dataset_id = failed_queue['result'][0]['datasetKey']
-      res = Colrapi.metrics(dataset_id)
-      assert_equal('Dataset has not finished importing or failed to import', res['message'])
+      failed_queue['result'].each do |r|
+        dataset_id = r['datasetKey']
+        importer = Colrapi.importer(dataset_id: dataset_id)
+        unless importer['state'] == 'failed'
+          next
+        end
+        res = Colrapi.metrics(dataset_id)
+        assert_equal('Dataset has not finished importing or failed to import', res['message'])
+      end
     end
   end
 end

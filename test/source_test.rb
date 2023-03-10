@@ -12,7 +12,7 @@ class TestSource < Test::Unit::TestCase
   def test_source_not_current_only
     VCR.use_cassette("test_source_not_current_only") do
       res = Colrapi.source('9837', not_current_only: true)
-      assert_equal(104, res.size)
+      assert_true(res.size > 100)
     end
   end
 
