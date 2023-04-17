@@ -208,4 +208,12 @@ class TestDataset < Test::Unit::TestCase
       assert_true(res['result'][0]['size'] > 4716120)
     end
   end
+
+  def test_dataset_not_found
+    VCR.use_cassette("test_dataset_not_found") do
+      assert_raise Colrapi::NotFound do
+        puts Colrapi.dataset(dataset_id: '404')
+      end
+    end
+  end
 end
