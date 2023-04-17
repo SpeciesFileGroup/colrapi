@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    colrapi (0.1.0)
+    colrapi (0.1.1)
       faraday (~> 2.2)
       faraday-follow_redirects (>= 0.1, < 0.4)
       multi_json (~> 1.15)
