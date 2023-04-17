@@ -1,6 +1,7 @@
 require_relative "faraday" # !! Potential ruby 3.0 difference in module loading? relative differs from Serrano
-require "faraday_middleware"
+require "faraday/follow_redirects"
 require_relative "utils"
+require "colrapi/error"
 
 module Colrapi
   class Request
@@ -137,7 +138,7 @@ module Colrapi
                    f.request(:basic_auth, @user, @password)
                  end
                  f.response :logger
-                 f.use FaradayMiddleware::RaiseHttpException
+                 f.use Faraday::ColrapiErrors::Middleware
                  f.adapter Faraday.default_adapter
                end
              else
@@ -145,7 +146,7 @@ module Colrapi
                  if !@user.nil? and !@password.nil?
                    f.request(:basic_auth, @user, @password)
                  end
-                 f.use FaradayMiddleware::RaiseHttpException
+                 f.use Faraday::ColrapiErrors::Middleware
                  f.adapter Faraday.default_adapter
                end
              end

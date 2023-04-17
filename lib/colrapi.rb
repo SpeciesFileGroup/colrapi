@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "erb"
+require_relative "colrapi/error"
 require_relative "colrapi/version"
 require_relative "colrapi/request"
 require "colrapi/helpers/configuration"
