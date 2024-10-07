@@ -79,7 +79,8 @@ class TestSector < Test::Unit::TestCase
 
   def test_sector_last_synced
     VCR.use_cassette("test_sector_last_synced") do
-      res = Colrapi.sector('3', last_synced_before: Date.new(2020,07,20))
+      # merge sectors might not be synced, so filter by attach mode
+      res = Colrapi.sector('3', last_synced_before: Date.new(2020,07,20), mode: 'attach')
       res['result'].each do |r|
         sync = Colrapi.sector_sync('3', sector_id: r['id'])
         assert_true(Date.parse(sync['started']) < Date.new(2020,07,20))

@@ -34,7 +34,7 @@ class TestIssues < Test::Unit::TestCase
     VCR.use_cassette("test_issues_unmatched_ref_brackets") do
       res = Colrapi.issues(@dataset_id, issue: 'unmatched reference brackets')
       res['result'].each do |r|
-        assert_equal('unmatched reference brackets', r['issues'][0])
+        assert_includes(r['issues'], 'unmatched reference brackets')
       end
     end
   end

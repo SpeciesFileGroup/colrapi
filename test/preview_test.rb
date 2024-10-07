@@ -9,7 +9,7 @@ class TestPreview < Test::Unit::TestCase
   def test_preview
     VCR.use_cassette("test_preview") do
       res = Colrapi.preview(@project_id)
-      assert_equal('Catalogue of Life Checklist', res['title'])
+      assert_equal('Catalogue of Life', res['title'])
     end
   end
 end

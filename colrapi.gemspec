@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description   = "colrapi (a play on Kholrabi) is a low-level wrapper around the Catalog of Life API."
   s.homepage      = "https://github.com/SpeciesFileGroup/colrapi"
   s.license       = "NCSA"
-  s.required_ruby_version = ">= 2.4.0"
+  s.required_ruby_version = ">= 2.5.0"
 
  # s.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"
 
@@ -33,21 +33,15 @@ Gem::Specification.new do |s|
   # s.add_dependency "example-gem", "~> 1.0"
 
   s.add_development_dependency "bundler", "~> 2.1", ">= 2.1.4"
-  # s.add_development_dependency "codecov", "~> 0.5.0"
-  # s.add_development_dependency "json", "~> 2.3", ">= 2.3.1"
   s.add_development_dependency "rake", "~> 13.0", ">= 13.0.1"
-  # s.add_development_dependency "standard", "~> 1.0"
-  # s.add_development_dependency "simplecov", "~> 0.21.2"
   s.add_development_dependency "test-unit", "~> 3.3", ">= 3.3.6"
   s.add_development_dependency "vcr", "~> 6.0"
   s.add_development_dependency "webmock", "~> 3.18"
+  s.add_development_dependency "rexml", "~> 3.3", ">= 3.3.6"
 
   s.add_runtime_dependency "faraday", "~> 2.2"
   s.add_runtime_dependency "faraday-follow_redirects", ">= 0.1", "< 0.4"
   s.add_runtime_dependency "multi_json", "~> 1.15"
-
-  # TODO: comment out
-  s.add_development_dependency "byebug"
 
   #  s.add_runtime_dependency "thor", "~> 1.0", ">= 1.0.1"
 

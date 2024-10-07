@@ -6,8 +6,6 @@ require 'test/unit'
 require 'colrapi'
 require 'vcr'
 
-# TODO: remove
-require 'byebug'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'test/fixtures/vcr'

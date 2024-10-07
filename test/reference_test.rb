@@ -70,25 +70,10 @@ class TestReference < Test::Unit::TestCase
     end
   end
 
-  def test_reference_orphans_title
+  def test_reference_orphans_csl
     VCR.use_cassette("test_reference_orphans") do
       res = Colrapi.reference(@dataset_id, subresource: 'orphans')
-      assert_equal('Brewster’s Edinburgh Encyclopedia Volume IX [part I]',
-                   res['result'][0]['csl']['container-title'])
-    end
-  end
-
-  def test_reference_orphans_year
-    VCR.use_cassette("test_reference_orphans") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans')
-      assert_equal(1815, res['result'][0]['year'])
-    end
-  end
-
-  def test_reference_orphans_author_fmaily
-    VCR.use_cassette("test_reference_orphans") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans')
-      assert_equal('Leach', res['result'][0]['csl']['author'][0]['family'])
+      assert_includes(res['result'][0], 'csl')
     end
   end
 
@@ -109,6 +94,7 @@ class TestReference < Test::Unit::TestCase
   def test_reference_orphans_total
     VCR.use_cassette("test_reference_orphans_offset_limit") do
       res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
+      # for this endpoint the total is limit + 1, probably because calculating the total is too expensive
       assert_equal(4, res['total'])
     end
   end

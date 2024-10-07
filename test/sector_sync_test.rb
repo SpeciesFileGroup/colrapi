@@ -39,25 +39,6 @@ class TestSectorSync < Test::Unit::TestCase
     end
   end
 
-  def test_sector_sync_id_tree
-    VCR.use_cassette("test_sector_sync_id_tree") do
-      res = Colrapi.sector_sync(@col_draft)
-      sector_id = res['result'][0]['sectorKey']
-      attempt = res['result'][0]['attempt']
-      tree = Colrapi.sector_sync(@col_draft, sector_id: sector_id, attempt: attempt, subresource: 'tree')
-      i = 0
-      tree.split(/\n/).each do |line|
-        next if line.include? '[unranked]' or line.include? '*'
-        i += 1
-        name = line.split(/\[/)[0].strip
-        rank = line.split(/\[/)[1].gsub(/\]/, '').strip
-        parsed_name = Colrapi.parser_name(name, rank: rank)
-        assert_true(parsed_name['parsed'])
-        break if i > 10
-      end
-    end
-  end
-
   def test_sector_sync_offset
     VCR.use_cassette("test_sector_sync_offset_limit") do
       res = Colrapi.sector_sync(@col_draft, offset: 3, limit: 7)

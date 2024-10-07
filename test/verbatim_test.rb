@@ -29,14 +29,14 @@ class TestVerbatim < Test::Unit::TestCase
   def test_verbatim_total
     VCR.use_cassette("test_verbatim_offset_limit") do
       res = Colrapi.verbatim(@dataset_id, offset: 5, limit: 2)
-      assert_equal(38, res['total'])
+      assert_equal(44, res['total'])
     end
   end
 
   def test_verbatim_id
     VCR.use_cassette("test_verbatim_id") do
       res = Colrapi.verbatim(@dataset_id, verbatim_id: '4')
-      assert_equal('Psocodea', res['terms']['dwc:order'])
+      assert_equal('Liposcelis kipukae', res['terms']['dcterms:title'])
     end
   end
 

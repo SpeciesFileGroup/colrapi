@@ -2,76 +2,79 @@ require_relative "test_helper"
 
 class TestName < Test::Unit::TestCase
   def setup
-    @dataset_id = "9837"
+    VCR.use_cassette("test_name_setup") do
+      @dataset_id = "9837"
+      @name_id = '00000fe0-d4e6-4a74-8c99-b4ad127e7e64'
+    end
   end
 
   def test_name_id
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('00000fe0-d4e6-4a74-8c99-b4ad127e7e64', res['result'][9]['id'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('00000fe0-d4e6-4a74-8c99-b4ad127e7e64', res['id'])
     end
   end
 
   def test_name_scientific
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('Pericycos philippinensis', res['result'][9]['scientificName'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('Pericycos philippinensis', res['scientificName'])
     end
   end
 
   def test_name_authorship
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('Breuning, 1944', res['result'][9]['authorship'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('Breuning, 1944', res['authorship'])
     end
   end
 
   def test_name_rank
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('species', res['result'][9]['rank'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('species', res['rank'])
     end
   end
 
   def test_name_genus
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('Pericycos', res['result'][9]['genus'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('Pericycos', res['genus'])
     end
   end
 
   def test_name_specific_epithet
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('philippinensis', res['result'][9]['specificEpithet'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('philippinensis', res['specificEpithet'])
     end
   end
 
   def test_name_authors0
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('Breuning', res['result'][9]['combinationAuthorship']['authors'][0])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('Breuning', res['combinationAuthorship']['authors'][0])
     end
   end
 
   def test_name_year
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('1944', res['result'][9]['combinationAuthorship']['year'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('1944', res['combinationAuthorship']['year'])
     end
   end
 
   def test_name_code
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('zoological', res['result'][9]['code'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('zoological', res['code'])
     end
   end
 
   def test_name_origin
     VCR.use_cassette("test_name") do
-      res = Colrapi.name(@dataset_id)
-      assert_equal('source', res['result'][9]['origin'])
+      res = Colrapi.name(@dataset_id, name_id: @name_id)
+      assert_equal('source', res['origin'])
     end
   end
 
@@ -89,12 +92,13 @@ class TestName < Test::Unit::TestCase
     end
   end
 
-  def test_name_total
-    VCR.use_cassette("test_name_offset_limit") do
-      res = Colrapi.name(@dataset_id, offset: 13383, limit: 1)
-      assert_equal(4716121, res['total'])
-    end
-  end
+  # TODO: uncomment when bug fixed: https://github.com/CatalogueOfLife/backend/issues/1361
+  # def test_name_total
+  #   VCR.use_cassette("test_name_offset_limit") do
+  #     res = Colrapi.name(@dataset_id, offset: 13383, limit: 1)
+  #     assert_equal(4716121, res['total'])
+  #   end
+  # end
 
   def test_name_by_id
     VCR.use_cassette("test_name_id") do
@@ -190,21 +194,21 @@ class TestName < Test::Unit::TestCase
   # types do not seem to get synced into the CoL Annual Checklist so test might break if the data updates in Scarabs (1027)
   def test_name_id_types_type
     VCR.use_cassette("test_name_id_types") do
-      res = Colrapi.name('1027', name_id: '18-.08-.26-.01-.003-.000-.041-.-', subresource: 'types')
+      res = Colrapi.name('1027', name_id: '18-.08-.15-.06-.004-.000-.010-.-', subresource: 'types')
       assert_equal('holotype', res[0]['status'])
     end
   end
 
   def test_name_id_types_ref_id
     VCR.use_cassette("test_name_id_types") do
-      res = Colrapi.name('1027', name_id: '18-.08-.26-.01-.003-.000-.041-.-', subresource: 'types')
+      res = Colrapi.name('1027', name_id: '18-.08-.15-.06-.004-.000-.010-.-', subresource: 'types')
       assert_equal('LINNE-005', res[0]['referenceId'])
     end
   end
 
   def test_name_id_types_host
     VCR.use_cassette("test_name_id_types") do
-      res = Colrapi.name('1027', name_id: '18-.08-.26-.01-.003-.000-.041-.-', subresource: 'types')
+      res = Colrapi.name('1027', name_id: '18-.08-.15-.06-.004-.000-.010-.-', subresource: 'types')
       assert_equal('USA, Washington D.C., National Museum of Natural History, (formerly, United States National Museum)', res[0]['host'])
     end
   end
