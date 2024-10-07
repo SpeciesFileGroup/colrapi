@@ -25,11 +25,12 @@ module Colrapi
   # Get a dataset's original archive
   #
   # @param dataset_id [String] The dataset id
+  # @param attempt [Integer] Returns archive for a past import attempt number
   #
   # @return [Binary] An archive of the original dataset
-  def self.archive(dataset_id, verbose: false)
+  def self.archive(dataset_id, attempt: nil, verbose: false)
     endpoint = "dataset/#{dataset_id}/archive"
-    Request.new(endpoint: endpoint, verbose: verbose).perform
+    Request.new(endpoint: endpoint, attempt: attempt, verbose: verbose).perform
   end
 
   # Get dataset metadata
