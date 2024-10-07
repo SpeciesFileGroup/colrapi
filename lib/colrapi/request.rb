@@ -17,6 +17,7 @@ module Colrapi
       @url = args[:url]
       @q = Array(args[:q]) if args[:q]
       @id = args[:id]
+      @attempt = args[:attempt]
       @format = args[:format]
       @regexp = args[:regexp]
       @content = Array(args[:content]) if args[:content]
@@ -108,7 +109,7 @@ module Colrapi
 
     def perform
 
-      args = { q: @q, regex: @regexp, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
+      args = { q: @q, regex: @regexp, attempt: @attempt, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
                rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank, projectKey: @project_id,
                term: @term, termOp: @term_operator, status: @status, decisionMode: @decision_mode,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
