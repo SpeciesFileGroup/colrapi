@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary       = "Catalog of Life Client"
   s.description   = "colrapi (a play on Kholrabi) is a low-level wrapper around the Catalog of Life API."
   s.homepage      = "https://github.com/SpeciesFileGroup/colrapi"
-  s.license       = "NCSA"
+  s.license       = "MIT"
   s.required_ruby_version = ">= 2.5.0"
 
  # s.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"

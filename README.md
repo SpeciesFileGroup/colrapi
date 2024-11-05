@@ -37,7 +37,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/mjy/co
 
 ## License
 
-The gem is available as open source under the terms of the [NCSA/Illinois](https://opensource.org/licenses/NCSA).
+The gem is available as open source under the terms of the [MIT](https://opensource.org/licenses/MIT) license.
 
 ## Code of Conduct
 
