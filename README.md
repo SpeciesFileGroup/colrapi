@@ -18,11 +18,50 @@ Or install it yourself as:
 
     $ gem install colrapi
 
-## Usage
 
-In development, this is it for now:
+
+## Name usage search
+
+There are a two ways to conduct name usage search in ChecklistBank/Catalogue of Life: 1) using Elasticsearch or 2) querying PSQL directly. Elasticsearch offers more advanced search functionality and parameters while PSQL might perform faster.
+
+### 1) Elasticsearch 
+#### [/nameusage/search](http://api.checklistbank.org/#/default/search_4) or [/dataset/{dataset_id}/nameusage/search](http://api.checklistbank.org/#/default/searchDataset)
+
+Elasticsearch all of ChecklistBank:
 ```ruby
- res = Colrapi.nameusage(q: 'Homo sapiens') #  => MultiJson object
+Colrapi.nameusage_search(q: 'Homo sapiens') #  => MultiJson object
+```
+
+Elasticsearch the Catalogue of Life latest release:
+```ruby
+Colrapi.nameusage_search(dataset_id: '3LR', q: 'Homo sapiens') #  => MultiJson object
+```
+
+Elasticsearch the Catalogue of Life 2024 Annual Checklist:
+```ruby
+Colrapi.nameusage_search(dataset_id: 'COL24', q: 'Homo sapiens') #  => MultiJson object
+```
+
+Elasticsearch Orthoptera Species File:
+```ruby
+Colrapi.nameusage_search(dataset_id: 1021, q: 'Cyphoderris strepitans') #  => MultiJson object
+```
+
+### 2) PSQL Search
+#### [/dataset/{dataset_id}/nameusage](https://api.checklistbank.org/#/default/list_3)
+Query PSQL directly for *Homo sapiens* in the Catalogue of Life latest release:
+```ruby
+Colrapi.nameusage('3LR', q: 'Homo sapiens') #  => MultiJson object
+```
+
+Query PSQL directly for *Homo sapiens* in the Catalogue of Life 2024 Annual Checklist:
+```ruby
+Colrapi.nameusage('COL24', q: 'Homo sapiens') #  => MultiJson object
+```
+
+Query PSQL directly for *Cyphoderris strepitans* in Orthoptera Species File
+```ruby
+Colrapi.nameusage(1021, q: 'Cyphoderris strepitans') #  => MultiJson object
 ```
 
 ## Development
