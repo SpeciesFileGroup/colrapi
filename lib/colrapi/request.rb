@@ -29,6 +29,8 @@ module Colrapi
       @facet = Array(args[:facet]) if args[:facet]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
+      @environment = args[:environment]
+      @highest_taxon_id = args[:highest_taxon_id]
       @parent_rank = args[:parent_rank]
       @root_id = Array(args[:root_id]) if args[:root_id]
       @root2_id = Array(args[:root2_id]) if args[:root2_id]
@@ -130,6 +132,7 @@ module Colrapi
                subgenus: @within_subgenus, section: @within_section, species: @within_species,
                nidx: @nidx_id, state: @state, running: @running, notCurrentOnly: @not_current_only,
                broken: @broken, subjectDatasetKey: @subject_dataset_id, mode: @mode, subject: @subject,
+               TAXON_ID: @highest_taxon_id, environment: @environment,
                sortBy: @sort_by, reverse: @reverse, url: @url, offset: @offset, limit: @limit}
       opts = args.delete_if { |_k, v| v.nil? }
 

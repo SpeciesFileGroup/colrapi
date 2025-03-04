@@ -437,7 +437,7 @@ module Colrapi
   end
 
   # Get name usages or a nameusage from a dataset
-  #   Note: Queries the PSQL database, whereas nameusage_search uses Elastic Search
+  #   Note: Queries the PostgreSQL database, whereas nameusage_search uses Elasticsearch
   #
   # @param dataset_id [String] The dataset id
   # @param nameusage_id [String] The nameusage id
@@ -551,6 +551,8 @@ module Colrapi
   # @param min_rank [String, nil] minimum taxonomic rank of name usages
   # @param max_rank [String, nil] maximum taxonomic rank of name usages
   # @param facet [Array, String, nil] the search facet
+  # @param environment [Array, String, nil] filter by environment (MARINE, TERRESTRIAL, FRESHWATER, BRACKISH)
+  # @param highest_taxon_id [String, nil] Filter by highest taxon ID
   #
   # @param sort_by [String, nil] sort results by NAME, TAXONOMIC, INDEX_NAME_ID, NATIVE, or RELEVANCE
   # @param reverse [Boolean] sort in reverse order
@@ -560,8 +562,8 @@ module Colrapi
   #
   # @return [Array, Boolean] An array of hashes
   def self.nameusage_search(q: nil, dataset_id: nil, endpoint: 'nameusage/search', content: nil, issue: nil,
-                            type: nil, rank: nil, min_rank: nil, max_rank: nil, facet: nil,
-                            sort_by: nil, reverse: nil, offset: nil, limit: nil,
+                            type: nil, rank: nil, min_rank: nil, max_rank: nil, environment: nil, facet: nil,
+                            highest_taxon_id: nil, sort_by: nil, reverse: nil, offset: nil, limit: nil, 
                             verbose: false)
 
     # a nil dataset_id will search name usages from all datasets in ChecklistBank
@@ -570,8 +572,9 @@ module Colrapi
     end
 
     Request.new(endpoint: endpoint, q: q, content: content, issue: issue, type: type,
-                rank: rank, min_rank: min_rank, max_rank: max_rank, facet: facet,
-                sort_by: sort_by, reverse: reverse, offset: offset, limit: limit, verbose: verbose).perform
+                rank: rank, min_rank: min_rank, max_rank: max_rank, facet: facet, environment: environment,
+                highest_taxon_id: highest_taxon_id, sort_by: sort_by, reverse: reverse,
+                offset: offset, limit: limit, verbose: verbose).perform
   end
 
   # Get a name usage suggestion

@@ -51,4 +51,26 @@ class TestNameusageSearch < Test::Unit::TestCase
       end
     end
   end
+
+  def test_nameusage_search_environment
+    VCR.use_cassette("test_nameusage_search_environment") do
+      res = Colrapi.nameusage_search(dataset_id: '9837', environment: 'MARINE')
+      res['result'].each do |res|
+        assert_include(res['usage']['environments'], 'marine')
+      end
+    end
+  end
+
+  def test_nameusage_search_highest_taxon_id
+    VCR.use_cassette("test_nameusage_search_highest_taxon_id") do
+      res = Colrapi.nameusage_search(dataset_id: '9837', environment: 'MARINE', highest_taxon_id: 'RT')
+      res['result'].each do |res|
+        classification = {}
+        res['classification'].each do |cl|
+          classification[cl['rank']] = cl['name']
+        end
+        assert_equal(classification['phylum'], 'Arthropoda')
+      end
+    end
+  end
 end
