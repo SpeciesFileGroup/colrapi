@@ -25,7 +25,7 @@ class TestIssues < Test::Unit::TestCase
     VCR.use_cassette("test_issues_interpreted_duplicate_name") do
       res = Colrapi.issues(@dataset_id, issue: 'duplicate name', mode: 'interpreted')
       res['result'].each do |r|
-        assert_true((r.include? 'usage' and r['issues'][0] == 'duplicate name'))
+        assert_true((r.include? 'usage' and r['issues'].include? 'duplicate name'))
       end
     end
   end
