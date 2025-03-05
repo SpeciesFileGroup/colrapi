@@ -234,7 +234,7 @@ class TestTaxon < Test::Unit::TestCase
 
   def test_taxon_media
     VCR.use_cassette("test_taxon_media") do
-      res = Colrapi.taxon('1044', taxon_id: 'urn:lsid:marinespecies.org:taxname:166055', subresource: 'media')
+      res = Colrapi.taxon('1044', taxon_id: 'urn:lsid:marinespecies.org:taxname:132251', subresource: 'media')
       assert_equal('image', res[0]['type'])
     end
   end

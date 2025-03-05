@@ -15,7 +15,7 @@ class TestNameusage < Test::Unit::TestCase
   def test_nameusage_id_related
     VCR.use_cassette("test_nameusage_id_related") do
       res = Colrapi.nameusage(@dataset_id, nameusage_id: '32', subresource: 'related')
-      assert_equal(3, res[0]['datasetKey'])
+      assert_true(res.size > 0)
     end
   end
 

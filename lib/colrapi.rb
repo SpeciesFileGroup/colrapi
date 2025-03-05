@@ -693,11 +693,12 @@ module Colrapi
   #   (Note: you can also use 3LRC where 3 is the project_id as an ID on any endpoint with dataset_id or project_id
   #    to get data from the latest release candidate, or 3LR gets the latest release)
   # @param project_id [String] The project id
+  # @param token [String, nil] The authentication token from retrieved with Colrapi.user_login(user, password)
   #
   # @param verbose [Boolean] Print headers to STDOUT
   # @return [Array, Boolean] An array of hashes
-  def self.preview(project_id, verbose: false)
-    Request.new(endpoint: "dataset/#{project_id}/preview", verbose: verbose).perform
+  def self.preview(project_id, token: nil, verbose: false)
+    Request.new(endpoint: "dataset/#{project_id}LRC.json", token: token, verbose: verbose).perform
   end
 
   # Get a reference with @reference_id from dataset @dataset_id via the reference route

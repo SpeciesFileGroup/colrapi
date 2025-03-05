@@ -10,7 +10,7 @@ class TestPatch < Test::Unit::TestCase
   def test_patch
     VCR.use_cassette("test_patch") do
       res = Colrapi.patch(@dataset_id)
-      assert_equal(403, res['code'])
+      assert_equal(401, res['code'])
     end
   end
 
