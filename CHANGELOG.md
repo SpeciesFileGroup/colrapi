@@ -1,8 +1,12 @@
 ## [Unreleased]
- - Updated license from NCSA to MIT
+
+## [0.1.4] - 2025-03-05
+ - Fixed authentication
+ - Kept depreciated ChecklistBank preview endpoint functionality by using /dataset/{dataset_id}LRC.json instead (now requires a token)
 
 ## [0.1.3] - 2025-03-04
  - Added environment and highest_taxon_id to name_usage_search
+ - Updated license from NCSA to MIT
 
 ## [0.1.2] - 2024-09-11
  - Removed Gemfile.lock

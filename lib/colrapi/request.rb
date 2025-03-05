@@ -139,7 +139,7 @@ module Colrapi
       conn = if verbose
                Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
                  if !@user.nil? and !@password.nil?
-                   f.request(:basic_auth, @user, @password)
+                   f.request :authorization, :basic, @user, @password
                  end
                  f.response :logger
                  f.use Faraday::ColrapiErrors::Middleware
@@ -148,7 +148,7 @@ module Colrapi
              else
                Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
                  if !@user.nil? and !@password.nil?
-                   f.request(:basic_auth, @user, @password)
+                   f.request :authorization, :basic, @user, @password
                  end
                  f.use Faraday::ColrapiErrors::Middleware
                  f.adapter Faraday.default_adapter

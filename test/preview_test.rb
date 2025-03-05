@@ -12,19 +12,10 @@ class TestPreview < Test::Unit::TestCase
     end
   end
 
-  # only tests that it's metadata for a CoL release and not that it's the latest preview release
-  def test_preview_unauth
-    VCR.use_cassette("test_preview_unauth") do
-      res = Colrapi.preview(@project_id)
-      assert_raise("HTTP 401 Unauthorized")
-      #assert_equal('Catalogue of Life', res['title'])
-    end
-  end
-
   def test_preview_auth
     VCR.use_cassette("test_preview_auth") do
       if @token != nil
-        res = Colrapi.preview(@project_id, token: @token)
+        res = Colrapi.preview(@project_id, @token)
         assert_equal('Catalogue of Life', res['title'])
       end
     end

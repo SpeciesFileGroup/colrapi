@@ -697,7 +697,7 @@ module Colrapi
   #
   # @param verbose [Boolean] Print headers to STDOUT
   # @return [Array, Boolean] An array of hashes
-  def self.preview(project_id, token: nil, verbose: false)
+  def self.preview(project_id, token, verbose: false)
     Request.new(endpoint: "dataset/#{project_id}LRC.json", token: token, verbose: verbose).perform
   end
 
