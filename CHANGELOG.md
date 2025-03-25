@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.1.5] - 2025-03-25
+ - Added usage_id to nameusage_search
+
 ## [0.1.4] - 2025-03-05
  - Fixed authentication
  - Kept depreciated ChecklistBank preview endpoint functionality by using /dataset/{dataset_id}LRC.json instead (now requires a token)
