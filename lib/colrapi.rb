@@ -78,7 +78,7 @@ module Colrapi
                    contributes_to: nil, has_source_dataset: nil, has_gbif_id: nil, gbif_id: nil, gbif_publisher_id: nil,
                    editor: nil, reviewer: nil, modified_by: nil, origin: nil, type: nil, license: nil, row_type: nil,
                    created_after: nil, created_before: nil, issued_after: nil, issued_before: nil, modified_after: nil,
-                   modified_before: nil, min_size: nil, sort_by: nil, reverse: nil, offset: nil, limit: nil,
+                   modified_before: nil, min_size: nil, sort_by: nil, token: nil, reverse: nil, offset: nil, limit: nil,
                    verbose: false)
     endpoint = "dataset"
     unless dataset_id.nil?
