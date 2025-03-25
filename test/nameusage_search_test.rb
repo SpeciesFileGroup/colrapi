@@ -73,4 +73,13 @@ class TestNameusageSearch < Test::Unit::TestCase
       end
     end
   end
+
+  def test_nameusage_search_usage_id
+    VCR.use_cassette("test_nameusage_search_usage_id") do
+      res = Colrapi.nameusage_search(dataset_id: '9837', usage_id: 'C', limit: 100)
+      res['result'].each do |res|
+        assert_equal(res['usage']['name']['scientificName'], 'Chromista')
+      end
+    end
+  end
 end

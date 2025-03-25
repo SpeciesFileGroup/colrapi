@@ -1,15 +1,11 @@
-require_relative "faraday" # !! Potential ruby 3.0 difference in module loading? relative differs from Serrano
+require_relative "faraday"
 require "faraday/follow_redirects"
 require_relative "utils"
 require "colrapi/error"
 
 module Colrapi
   class Request
-    attr_accessor :endpoint
-    attr_accessor :q
-    attr_accessor :verbose
-
-    attr_accessor :options
+    attr_accessor :endpoint, :q, :verbose, :options
 
     def initialize(**args)
       @endpoint = args[:endpoint]
@@ -31,6 +27,7 @@ module Colrapi
       @max_rank = args[:max_rank]
       @environment = args[:environment]
       @highest_taxon_id = args[:highest_taxon_id]
+      @usage_id = args[:usage_id]
       @parent_rank = args[:parent_rank]
       @root_id = Array(args[:root_id]) if args[:root_id]
       @root2_id = Array(args[:root2_id]) if args[:root2_id]
@@ -61,7 +58,7 @@ module Colrapi
       @term_operator = args[:term_operator]
       @issued = args[:issued]
       @issued_before = args[:issued]
-      @modified_after =  args[:modified_after]
+      @modified_after = args[:modified_after]
       @modified_before = args[:modified_before]
       @last_synced_before = args[:last_synced_before]
       @min = args[:min]
@@ -132,30 +129,18 @@ module Colrapi
                subgenus: @within_subgenus, section: @within_section, species: @within_species,
                nidx: @nidx_id, state: @state, running: @running, notCurrentOnly: @not_current_only,
                broken: @broken, subjectDatasetKey: @subject_dataset_id, mode: @mode, subject: @subject,
-               TAXON_ID: @highest_taxon_id, environment: @environment,
-               sortBy: @sort_by, reverse: @reverse, url: @url, offset: @offset, limit: @limit}
+               TAXON_ID: @highest_taxon_id, USAGE_ID: @usage_id, environment: @environment,
+               sortBy: @sort_by, reverse: @reverse, url: @url, body: @body, offset: @offset, limit: @limit }
       opts = args.delete_if { |_k, v| v.nil? }
 
-      conn = if verbose
-               Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
-                 if !@user.nil? and !@password.nil?
-                   f.request :authorization, :basic, @user, @password
-                 end
-                 f.response :logger
-                 f.use Faraday::ColrapiErrors::Middleware
-                 f.adapter Faraday.default_adapter
-               end
-             else
-               Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
-                 if !@user.nil? and !@password.nil?
-                   f.request :authorization, :basic, @user, @password
-                 end
-                 f.use Faraday::ColrapiErrors::Middleware
-                 f.adapter Faraday.default_adapter
-               end
-             end
+      conn = Faraday.new(url: Colrapi.base_url, request: { params_encoder: Faraday::FlatParamsEncoder }) do |f|
+        f.request :authorization, :basic, @user, @password if @user && @password
+        f.response :logger if @verbose
+        f.use Faraday::ColrapiErrors::Middleware
+        f.adapter Faraday.default_adapter
+      end
 
-      conn.headers['Authorization'] = "Bearer #{@token}" unless @token.nil?
+      conn.headers['Authorization'] = "Bearer #{@token}" if @token
       conn.headers['Accept'] = 'application/json,*/*'
       conn.headers[:user_agent] = make_user_agent
       conn.headers["X-USER-AGENT"] = make_user_agent
@@ -168,7 +153,6 @@ module Colrapi
       rescue MultiJson::ParseError
         res.body
       end
-      
     end
   end
 end
