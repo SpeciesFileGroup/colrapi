@@ -543,20 +543,33 @@ module Colrapi
 
   # Search the nameusage route, which uses Elastic Search
   #
-  # @param q [String] A query string
+  # @param authorship [Array, String, nil] filters by authorship
+  # @param authorship_year [Array, String, nil] filters by authorship year
+  # @param content [Array, String, nil] restrict search to SCIENTIFIC_NAME, or AUTHORSHIP
   # @param dataset_id [String, nil] restricts name usage search within a dataset
   # @param endpoint [String, nil] some endpoints have nested options
-  # @param content [Array, String, nil] restrict search to SCIENTIFIC_NAME, or AUTHORSHIP
-  # @param issue [Array, String, nil] the data quality issue
-  # @param type [String, nil] sets the type of search to PREFIX, WHOLE_WORDS, or EXACT
-  # @param rank [String, nil] taxonomic rank of name usages
-  # @param min_rank [String, nil] minimum taxonomic rank of name usages
-  # @param max_rank [String, nil] maximum taxonomic rank of name usages
-  # @param facet [Array, String, nil] the search facet
   # @param environment [Array, String, nil] filter by environment (MARINE, TERRESTRIAL, FRESHWATER, BRACKISH)
+  # @param extinct [Array, int, nil] filter by extinct status (0, 1)
+  # @param facet [Array, String, nil] the search facet
+  # @param field [Array, String, nil] filter by name field (see: http://api.checklistbank.org/vocab/namefield)
   # @param highest_taxon_id [String, nil] Filter by highest taxon ID
+  # @param issue [Array, String, nil] the data quality issue
+  # @param max_rank [String, nil] maximum taxonomic rank of name usages
+  # @param min_rank [String, nil] minimum taxonomic rank of name usages
+  # @param name_type [Array, String, nil] filter by name type (hybrid formula, informal, no name, otu, placeholder, scientific, virus)
+  # @param nomenclatural_code [Array, String, nil] filter by nomenclatural code (botanical, zoological, bacterial, viral, phytosociological, cultivars)
+  # @param nomenclatural_status [Array, String, nil] filter by nomenclatural status (acceptable, conserved, doubtful, established, manuscript, not established, rejected, unacceptable)
+  # @param origin [Array, String, nil] filter by origin of the name usage (see: http://api.checklistbank.org/vocab/origin)
+  # @param q [String] A query string
+  # @param rank [Array, String, nil] taxonomic rank of name usages
+  # @param secondary_source [Array, String, nil] filter by secondary source (authorship, basionym, extinct, holotype, parent, published in, rank, temporal range)
+  # @param sector_dataset_id [Array, String, nil] filter by the sector source dataset ID
+  # @param sector_mode [Array, String, nil] filter by the sector mode (attach, merge, union)
+  # @param status [Array, String, nil] filter by taxonomic status (accepted, ambiguous synonym, misapplied, provisionally accepted, synonym)
+  # @param taxonomic_group [Array, String, nil] filter by taxonomic group (see: http://api.checklistbank.org/vocab/taxgroup)
+  # @param type [String, nil] sets the type of search to PREFIX, WHOLE_WORDS, or EXACT
   # @param usage_id [String, nil] Filter by usage ID
-  #
+  # 
   # @param sort_by [String, nil] sort results by NAME, TAXONOMIC, INDEX_NAME_ID, NATIVE, or RELEVANCE
   # @param reverse [Boolean] sort in reverse order
   # @param offset [Integer] Offset for pagination
@@ -564,20 +577,29 @@ module Colrapi
   # @param verbose [Boolean] Print headers to STDOUT
   #
   # @return [Array, Boolean] An array of hashes
-  def self.nameusage_search(q: nil, dataset_id: nil, endpoint: 'nameusage/search', content: nil, issue: nil,
+  def self.nameusage_search(q: nil, authorship: nil, authorship_year: nil, dataset_id: nil, 
+                            endpoint: 'nameusage/search', extinct: nil, field: nil, content: nil, issue: nil,
                             type: nil, rank: nil, min_rank: nil, max_rank: nil, environment: nil, facet: nil,
-                            highest_taxon_id: nil, usage_id: nil, sort_by: nil, reverse: nil, offset: nil, limit: nil, 
-                            verbose: false)
+                            nomenclatural_code: nil, highest_taxon_id: nil, usage_id: nil, nomenclatural_status: nil, 
+                            name_type: nil, origin: nil, secondary_source: nil, 
+                            sector_mode: nil, sector_dataset_id: nil, status: nil, taxonomic_group: nil,
+                            sort_by: nil, reverse: nil, offset: nil, limit: nil, verbose: false)
 
     # a nil dataset_id will search name usages from all datasets in ChecklistBank
     unless dataset_id.nil?
       endpoint = "dataset/#{dataset_id}/nameusage/search"
     end
 
-    Request.new(endpoint: endpoint, q: q, content: content, issue: issue, type: type,
-                rank: rank, min_rank: min_rank, max_rank: max_rank, facet: facet, environment: environment,
-                highest_taxon_id: highest_taxon_id, usage_id: usage_id, sort_by: sort_by, reverse: reverse,
-                offset: offset, limit: limit, verbose: verbose).perform
+    Request.new(endpoint: endpoint, q: q, authorship: authorship, authorship_year: authorship_year, 
+                extinct: extinct, field: field, content: content, issue: issue, type: type,
+                rank: rank, min_rank: min_rank, max_rank: max_rank, facet: facet, 
+                nomenclatural_code: nomenclatural_code,environment: environment, 
+                highest_taxon_id: highest_taxon_id, usage_id: usage_id, 
+                name_type: name_type, nomenclatural_status: nomenclatural_status, origin: origin,
+                secondary_source: secondary_source, sector_mode: sector_mode, 
+                sector_dataset_id: sector_dataset_id, status: status, taxonomic_group: taxonomic_group, 
+                sort_by: sort_by, reverse: reverse,  offset: offset, limit: limit, 
+                verbose: verbose).perform
   end
 
   # Get a name usage suggestion

@@ -18,14 +18,18 @@ module Colrapi
       @regexp = args[:regexp]
       @content = Array(args[:content]) if args[:content]
       @name = args[:name]
-      @authorship = args[:authorship]
-      @code = args[:code]
+      @authorship = Array(args[:authorship]) if args[:authorship]
+      @authorship_year = Array(args[:authorship_year]) if args[:authorship_year]
+      @code = Array(args[:code]) if args[:code]
+      @nomenclatural_code = Array(args[:nomenclatural_code]) if args[:nomenclatural_code]  # unfortunately code and nom_code get used on different endpoints
+      @field = Array(args[:field]) if args[:field]
       @type = Array(args[:type]) if args[:type]
       @rank = Array(args[:rank]) if args[:rank]
       @facet = Array(args[:facet]) if args[:facet]
+      @extinct = Array(args[:extinct]) if args[:extinct]
       @min_rank = args[:min_rank]
       @max_rank = args[:max_rank]
-      @environment = args[:environment]
+      @environment = Array(args[:environment]) if args[:environment]
       @highest_taxon_id = args[:highest_taxon_id]
       @usage_id = args[:usage_id]
       @parent_rank = args[:parent_rank]
@@ -43,6 +47,7 @@ module Colrapi
       @has_gbif_id = args[:has_gbif_id]
       @gbif_id = args[:gbif_id]
       @gbif_publisher_id = args[:gbif_publisher_id]
+      @taxonomic_group = Array(args[:taxonomic_group]) if args[:taxonomic_group]
       @editor = args[:editor]
       @reviewer = args[:reviewer]
       @modified_by = args[:modified_by]
@@ -64,6 +69,12 @@ module Colrapi
       @min = args[:min]
       @max = args[:max]
       @min_size = args[:min_size]
+      @name_type = Array(args[:name_type]) if args[:name_type]
+      @nomenclatural_status = Array(args[:nomenclatural_status]) if args[:nomenclatural_status]
+      @status = Array(args[:status]) if args[:status]
+      @sector_mode = Array(args[:sector_mode]) if args[:sector_mode]
+      @sector_dataset_id = Array(args[:sector_dataset_id]) if args[:sector_dataset_id]
+      @secondary_source = Array(args[:secondary_source]) if args[:secondary_source]
       @size = args[:size]
       @within_superkingdom = args[:within_superkingdom]
       @within_kingdom = args[:within_kingdom]
@@ -108,16 +119,19 @@ module Colrapi
 
     def perform
 
-      args = { q: @q, regex: @regexp, attempt: @attempt, content: @content, name: @name, authorship: @authorship, code: @code, type: @type,
+      args = { q: @q, regex: @regexp, attempt: @attempt, content: @content, name: @name, authorship: @authorship, 
+               authorshipYear: @authorship_year, code: @code, nomCode: @nomenclatural_code, field: @field, extinct: @extinct, type: @type,
                rank: @rank, minRank: @min_rank, maxRank: @max_rank, parentRank: @parent_rank, projectKey: @project_id,
                term: @term, termOp: @term_operator, status: @status, decisionMode: @decision_mode,
                alias: @short_title, private: @private, releasedFrom: @released_from, contributesTo: @contributes_to,
-               hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, gbifKey: @gbif_id,
+               hasSourceDataset: @has_source_dataset, hasGbifKey: @has_gbif_id, group: @taxonomic_group, gbifKey: @gbif_id,
                gbifPublisherKey: @gbif_publisher_id, editor: @editor, reviewer: @reviewer, modifiedBy: @modified_by,
                id: @id, format: @format, root: @root_id, root2: @root2_id, synonyms: @include_synonyms,
                showParent: @include_parent, origin: @origin, original: @original, license: @license, rowType: @row_type,
                created: @created_after, createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before,
                modified: @modified_after, modifiedBefore: @modified_before, lastSync: @last_synced_before,
+               status: @status, nomStatus: @nomenclatural_status, nameType: @name_type,
+               sectorMode: @sector_mode, sectorDatasetKey: @sector_dataset_id, secondarySourceGroup: @secondary_source,
                minSize: @min_size, size: @size, issue: @issue, min: @min, max: @max, datasetKey: @dataset_id_filter,
                withoutData: @without_data, superkingdom: @within_superkingdom, kingdom: @within_kingdom,
                subkingdom: @within_subkingdom, superphylum: @within_superphylum, phylum: @within_phylum,

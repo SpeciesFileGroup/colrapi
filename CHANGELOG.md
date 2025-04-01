@@ -1,5 +1,21 @@
 ## [Unreleased]
 
+## [0.1.6] - 2025-03-25
+ - Added more nameusage_search parameters:
+    - authorship
+    - authorship_year
+    - extinct
+    - field
+    - name_type
+    - nomenclatural_code
+    - nomenclatural_status
+    - origin
+    - secondary_source
+    - sector_dataset_id
+    - sector_mode
+    - status
+    - taxonomic_group
+
 ## [0.1.5] - 2025-03-25
  - Added usage_id to nameusage_search
 
