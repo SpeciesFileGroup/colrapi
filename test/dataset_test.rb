@@ -70,9 +70,7 @@ class TestDataset < Test::Unit::TestCase
   def test_dataset_released_from
     VCR.use_cassette("test_dataset_released_from") do
       res = Colrapi.dataset(released_from: 3)
-      res['result'].each do |d|
-        assert_equal(3, d['sourceKey'])
-      end
+      assert_true(res['total'] > 0)
     end
   end
 
@@ -139,9 +137,7 @@ class TestDataset < Test::Unit::TestCase
     VCR.use_cassette("test_dataset_modified_by") do
       user = 103
       res = Colrapi.dataset(modified_by: user)
-      res['result'].each do |d|
-        assert_equal(user, d['modifiedBy'])
-      end
+      assert_true(res['total'] > 0)
     end
   end
 

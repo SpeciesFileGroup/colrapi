@@ -52,7 +52,7 @@ class TestVocab < Test::Unit::TestCase
   def test_vocab_country_nz
     VCR.use_cassette("test_vocab_country_nz") do
       res = Colrapi.vocab(term: 'country', subresource: 'nz')
-      assert_equal('new zealand', res['name'])
+      assert_equal('New Zealand', res['name'])
     end
   end
 

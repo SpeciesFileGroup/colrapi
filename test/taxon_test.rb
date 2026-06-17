@@ -46,112 +46,112 @@ class TestTaxon < Test::Unit::TestCase
   def test_taxon_classification_genus_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Alces', res[0]['name'])
+      assert_equal('Alces', res[15]['name'])
     end
   end
 
   def test_taxon_classification_genus_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('genus', res[0]['rank'])
+      assert_equal('genus', res[15]['rank'])
     end
   end
 
   def test_taxon_classification_subfamily_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Capreolinae', res[1]['name'])
+      assert_equal('Capreolinae', res[14]['name'])
     end
   end
 
   def test_taxon_classification_subfamily_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('subfamily', res[1]['rank'])
+      assert_equal('subfamily', res[14]['rank'])
     end
   end
 
   def test_taxon_classification_family_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Cervidae', res[2]['name'])
+      assert_equal('Cervidae', res[13]['name'])
     end
   end
 
   def test_taxon_classification_family_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('family', res[2]['rank'])
+      assert_equal('family', res[13]['rank'])
     end
   end
 
   def test_taxon_classification_order_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Artiodactyla', res[3]['name'])
+      assert_equal('Artiodactyla', res[12]['name'])
     end
   end
 
   def test_taxon_classification_order_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('order', res[3]['rank'])
+      assert_equal('order', res[12]['rank'])
     end
   end
 
   def test_taxon_classification_infraclass_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Eutheria', res[4]['name'])
+      assert_equal('Eutheria', res[11]['name'])
     end
   end
 
   def test_taxon_classification_infraclass_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('infraclass', res[4]['rank'])
+      assert_equal('infraclass', res[11]['rank'])
     end
   end
 
   def test_taxon_classification_subclass_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Theria', res[5]['name'])
+      assert_equal('Theria', res[10]['name'])
     end
   end
 
   def test_taxon_classification_subclass_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('subclass', res[5]['rank'])
+      assert_equal('subclass', res[10]['rank'])
     end
   end
 
   def test_taxon_classification_class_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Mammalia', res[6]['name'])
+      assert_equal('Mammalia', res[9]['name'])
     end
   end
 
   def test_taxon_classification_class_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('class', res[6]['rank'])
+      assert_equal('class', res[9]['rank'])
     end
   end
 
   def test_taxon_classification_kingdom_name
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('Animalia', res[14]['name'])
+      assert_equal('Animalia', res[1]['name'])
     end
   end
 
   def test_taxon_classification_kingdom_rank
     VCR.use_cassette("test_taxon_classification") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'classification')
-      assert_equal('kingdom', res[14]['rank'])
+      assert_equal('kingdom', res[1]['rank'])
     end
   end
 
@@ -165,28 +165,28 @@ class TestTaxon < Test::Unit::TestCase
   def test_taxon_distribution_status
     VCR.use_cassette("test_taxon_distribution") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'distribution')
-      assert_equal('native', res[0]['status'])
+      assert_equal('native', res[0]['establishmentMeans'])
     end
   end
 
   def test_taxon_info_status
     VCR.use_cassette("test_taxon_info") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'info')
-      assert_equal('accepted', res['taxon']['status'])
+      assert_equal('accepted', res['usage']['status'])
     end
   end
 
   def test_taxon_info_scrutinizer
     VCR.use_cassette("test_taxon_info") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'info')
-      assert_equal('Alfred L. Gardner,Peter Grubb', res['taxon']['scrutinizer'])
+      assert_equal('Alfred L. Gardner,Peter Grubb', res['usage']['scrutinizer'])
     end
   end
 
   def test_taxon_info_ref_id
     VCR.use_cassette("test_taxon_info") do
       res = Colrapi.taxon(@dataset_id, taxon_id: @taxon_id, subresource: 'info')
-      assert_equal('2471c9d1-3b0b-4991-977e-2cbf1ff2b920', res['taxon']['referenceIds'][0])
+      assert_equal('2471c9d1-3b0b-4991-977e-2cbf1ff2b920', res['usage']['referenceIds'][0])
     end
   end
 
@@ -221,7 +221,7 @@ class TestTaxon < Test::Unit::TestCase
   def test_taxon_interaction_related_name
     VCR.use_cassette("test_taxon_interaction") do
       res = Colrapi.taxon('2317', taxon_id: '28472', subresource: 'interaction')
-      assert_equal('Eragrostis curvula', res[0]['relatedTaxonScientificName'])
+      assert_equal('Schmidtia pappophoroides Steud. ex J.A.Schmidt', res[0]['relatedTaxonScientificName'])
     end
   end
 

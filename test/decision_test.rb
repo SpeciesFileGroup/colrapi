@@ -77,7 +77,7 @@ class TestDecision < Test::Unit::TestCase
       res = Colrapi.decision('3', subject: true)
       if res['total'] > 0
         res['result'].each do |d|
-          assert_equal('bare name', d['subject']['status'])
+          assert_equal('provisionally accepted', d['status'])
         end
       end
     end

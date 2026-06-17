@@ -157,9 +157,9 @@ class TestNameusageSearch < Test::Unit::TestCase
 
   def test_nameusage_search_secondary_source
     VCR.use_cassette("test_nameusage_search_secondary_source") do
-      res = Colrapi.nameusage_search(dataset_id: '3LXR', secondary_source: 'holotype', limit: 100)
+      res = Colrapi.nameusage_search(dataset_id: '3LXR', secondary_source: 'AUTHORSHIP', limit: 100)
       res['result'].each do |res|
-        assert_includes(res['secondarySourceGroups'], 'holotype')
+        assert_includes(res['secondarySourceGroups'], 'authorship')
       end
     end
   end

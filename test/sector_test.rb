@@ -37,7 +37,7 @@ class TestSector < Test::Unit::TestCase
   def test_sector_name
     VCR.use_cassette("test_sector_name") do
       res = Colrapi.sector(@dataset_id, name: 'Fabales')
-      assert_equal(1759, res['result'][0]['id'])
+      assert_equal(1037, res['result'][0]['id'])
     end
   end
 

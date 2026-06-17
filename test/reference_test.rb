@@ -70,33 +70,34 @@ class TestReference < Test::Unit::TestCase
     end
   end
 
-  def test_reference_orphans_csl
-    VCR.use_cassette("test_reference_orphans") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans')
-      assert_includes(res['result'][0], 'csl')
-    end
-  end
-
-  def test_reference_orphans_offset
-    VCR.use_cassette("test_reference_orphans_offset_limit") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
-      assert_equal(5, res['offset'])
-    end
-  end
-
-  def test_reference_orphans_limit
-    VCR.use_cassette("test_reference_orphans_offset_limit") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
-      assert_equal(3, res['limit'])
-    end
-  end
-
-  def test_reference_orphans_total
-    VCR.use_cassette("test_reference_orphans_offset_limit") do
-      res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
-      # for this endpoint the total is limit + 1, probably because calculating the total is too expensive
-      assert_equal(4, res['total'])
-    end
-  end
+  # Disabled: /reference/orphans returns 500 with or without auth. See catalogueoflife/backend#1533
+  # def test_reference_orphans_csl
+  #   VCR.use_cassette("test_reference_orphans") do
+  #     res = Colrapi.reference(@dataset_id, subresource: 'orphans')
+  #     assert_includes(res['result'][0], 'csl')
+  #   end
+  # end
+  #
+  # def test_reference_orphans_offset
+  #   VCR.use_cassette("test_reference_orphans_offset_limit") do
+  #     res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
+  #     assert_equal(5, res['offset'])
+  #   end
+  # end
+  #
+  # def test_reference_orphans_limit
+  #   VCR.use_cassette("test_reference_orphans_offset_limit") do
+  #     res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
+  #     assert_equal(3, res['limit'])
+  #   end
+  # end
+  #
+  # def test_reference_orphans_total
+  #   VCR.use_cassette("test_reference_orphans_offset_limit") do
+  #     res = Colrapi.reference(@dataset_id, subresource: 'orphans', offset: 5, limit: 3)
+  #     # for this endpoint the total is limit + 1, probably because calculating the total is too expensive
+  #     assert_equal(4, res['total'])
+  #   end
+  # end
 end
 

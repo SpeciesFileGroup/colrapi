@@ -6,11 +6,10 @@ class TestPatch < Test::Unit::TestCase
     @patch_id = '1027'
   end
 
-  # expect unauthorized without token
   def test_patch
     VCR.use_cassette("test_patch") do
       res = Colrapi.patch(@dataset_id)
-      assert_equal(401, res['code'])
+      assert_true(res.is_a?(Array) && res.size > 0)
     end
   end
 

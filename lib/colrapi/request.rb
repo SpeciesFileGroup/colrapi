@@ -108,7 +108,6 @@ module Colrapi
       @reverse = args[:reverse]
       @limit = args[:limit]
       @offset = args[:offset]
-      @status = args[:status]
       @state = Array(args[:state]) if args[:state]
       @running = args[:running]
       @user = args[:user]
@@ -130,7 +129,7 @@ module Colrapi
                showParent: @include_parent, origin: @origin, original: @original, license: @license, rowType: @row_type,
                created: @created_after, createdBefore: @created_before, issued: @issued, issuedBefore: @issued_before,
                modified: @modified_after, modifiedBefore: @modified_before, lastSync: @last_synced_before,
-               status: @status, nomStatus: @nomenclatural_status, nameType: @name_type,
+               nomStatus: @nomenclatural_status, nameType: @name_type,
                sectorMode: @sector_mode, sectorDatasetKey: @sector_dataset_id, secondarySourceGroup: @secondary_source,
                minSize: @min_size, size: @size, issue: @issue, min: @min, max: @max, datasetKey: @dataset_id_filter,
                withoutData: @without_data, superkingdom: @within_superkingdom, kingdom: @within_kingdom,

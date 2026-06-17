@@ -8,21 +8,21 @@ class TestNameusageSuggest < Test::Unit::TestCase
   def test_nameusage_suggest
     VCR.use_cassette("test_nameusage_suggest") do
       res = Colrapi.nameusage_suggest(@col_ac22, 'Alces alc', max_rank: 'subspecies', limit: 1)
-      assert_equal('Alces alces alces', res['suggestions'][0]['match'])
+      assert_equal('Alces alces caucasicus Vereshchagin, 1955', res[0]['match'])
     end
   end
 
   def test_nameusage_suggest_limit
     VCR.use_cassette("test_nameusage_suggest") do
       res = Colrapi.nameusage_suggest(@col_ac22, 'Alces alc', max_rank: 'subspecies', limit: 1)
-      assert_equal(1, res['suggestions'].size)
+      assert_equal(1, res.size)
     end
   end
 
   def test_nameusage_suggest_rank
     VCR.use_cassette("test_nameusage_suggest") do
       res = Colrapi.nameusage_suggest(@col_ac22, 'Alces alc', max_rank: 'subspecies', limit: 1)
-      assert_equal('subspecies',  res['suggestions'][0]['rank'])
+      assert_equal('subspecies', res[0]['rank'])
     end
   end
 end

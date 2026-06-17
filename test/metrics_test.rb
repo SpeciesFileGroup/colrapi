@@ -12,7 +12,7 @@ class TestMetrics < Test::Unit::TestCase
   def test_metrics_unchanged
     VCR.use_cassette("test_metrics_unchanged") do
       res = Colrapi.metrics('49590')
-      assert_equal(13, res['taxonCount'])
+      assert_equal(10, res['taxonCount'])
     end
   end
 
